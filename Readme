@@ -1,5 +1,5 @@
 How to compile your hadoop program:
-javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-1.2.1-core.jar -d classes WordCount.java
+javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes WordCount.java
 How to 
 How to run youe hadoop program:
 jar -cvf wordcount.jar -C classes/ .
