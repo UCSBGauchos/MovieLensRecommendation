@@ -15,17 +15,16 @@ public class CountUserMain {
 		public void map(LongWritable unusedInKey, Text inValue, OutputCollector<LongWritable, IntWritable> output, Reporter reporter) throws IOException{
 			String eachLine = inValue.toString();
 			StringTokenizer token = new StringTokenizer(eachLine, " |\t");
-			while(token.hasMoreTokens()){
-				long uID = Long.parseLong(token.nextToken());
-				LongWritable userID = new LongWritable(uID);
-				long iID = Long.parseLong(token.nextToken());
-				LongWritable itemID = new LongWritable(iID);
-				int r = Integer.parseInt(token.nextToken());
-				IntWritable rating = new IntWritable(r);
-				Long d = Long.parseLong(token.nextToken());
-				LongWritable date = new LongWritable(d); 
-				output.collect(userID, one);
-			}
+	
+			long uID = Long.parseLong(token.nextToken());
+			LongWritable userID = new LongWritable(uID);
+			long iID = Long.parseLong(token.nextToken());
+			LongWritable itemID = new LongWritable(iID);
+			int r = Integer.parseInt(token.nextToken());
+			IntWritable rating = new IntWritable(r);
+			Long d = Long.parseLong(token.nextToken());
+			LongWritable date = new LongWritable(d); 
+			output.collect(userID, one);
 		}
 	}
 	
