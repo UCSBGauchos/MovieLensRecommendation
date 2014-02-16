@@ -1,6 +1,3 @@
-Some good resocurces for learning hadoop:
-http://blog.csdn.net/ab198604/article/details/8271860
-
 Project Name: MovieLens Recommendation
 DataSet: http://movielens.org/login
 
@@ -23,6 +20,14 @@ Hadoop jar countUser.jar CountUserMain /input /output
 
 Leave Safe Mode:
 hadoop dfsadmin -safemode leave
+
+Some good resocurces for learning hadoop:
+http://blog.csdn.net/ab198604/article/details/8271860
+http://blog.csdn.net/tucailing/article/details/9162011
+http://blog.sina.com.cn/s/blog_7fcb1aef0100zpux.html
+http://hadoop.apache.org/docs/r0.19.1/cn/mapred_tutorial.html#源代码
+http://www.cnblogs.com/xia520pi/archive/2012/05/16/2504205.html
+https://github.com/spring-projects/spring-xd/wiki/Hadoop-Installation
 
 
 
