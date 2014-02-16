@@ -18,3 +18,8 @@ jar -cvf countUser.jar -C classes/ .
 Run the program:
 Hadoop jar countUser.jar CountUserMain /input /output
 
+Leave Safe Mode:
+hadoop dfsadmin -safemode leave
+
+
+
