@@ -29,5 +29,15 @@ http://hadoop.apache.org/docs/r0.19.1/cn/mapred_tutorial.html#源代码
 http://www.cnblogs.com/xia520pi/archive/2012/05/16/2504205.html
 https://github.com/spring-projects/spring-xd/wiki/Hadoop-Installation
 
+Schedual:
+
+2-16 Preprocess of the DATA:
+The structure of the input data is:
+userID movieID rate date
+After mapreduce, The structure of the output data is:
+movieID(key) [userID userAvgRate specificRate](value)
+
+[XXX, Text]->MAP->[LongWritableKEY(movieID), userPostingInfoVALUE(userID, avgRate, rate)]->Reduce->[LongWritableKEY(movieID), LIST of userPostingInfoVALUE]
+
 
 
