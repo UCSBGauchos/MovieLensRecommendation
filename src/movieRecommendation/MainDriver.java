@@ -23,4 +23,10 @@ public class MainDriver {
 		}
 		System.exit(exitCode); 
 	}
+	
+	public static void run(JobConf job) throws IOExecption{
+		job.setJarByClass(MainDriver.class);
+		JobClient.reunJob(job)
+	}
+	
 }
