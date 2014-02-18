@@ -10,7 +10,7 @@ Path:
 cd /Users/yangbo/Workspaces/MyEclipse\ 10/MovieLensRecommendation/src/movieRecommendation
 
 Compile your hadoop program:
-javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes CountUserMain.java MovieRating.java PostingUser.java PostingUserArrayWritable.java
+javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes CountUserMain.java MovieRating.java PostingUser.java PostingUserArrayWritable.java MainDriver.java 
 
 Greate a JAR file:
 jar -cvf countUser.jar -C classes/ .
