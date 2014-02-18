@@ -39,5 +39,6 @@ movieID(key) [userID userAvgRate specificRate](value)
 
 [XXX, Text]->MAP->[LongWritableKEY(movieID), userPostingInfoVALUE(userID, avgRate, rate)]->Reduce->[LongWritableKEY(movieID), LIST of userPostingInfoVALUE]
 
-
+2-17:
+MainDriver (Trigger, choose function to run) + KNNDriverMain(Step two, process of the preprocessed data)
 
