@@ -14,7 +14,7 @@ import org.apache.hadoop.io.ArrayFile;
 //song
 //No Reduce process for this KNN step
 public class KNNMain {
-	public static final K = 10;
+	public static final int K = 10;
 	public static void main(String [] args) throws Excpetion{
 		JobConf job = new JobConf();
 		job.setJobName(KNNMain.class.getSimpleName());

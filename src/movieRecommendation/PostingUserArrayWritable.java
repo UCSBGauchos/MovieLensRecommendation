@@ -15,6 +15,10 @@ public class PostingUserArrayWritable {
 		this.array = values;
 	}
 	
+	public PostingUser[] getPosting() {
+		return array;
+	}
+	
 	public void readFields(DataInput in) throws IOException{
 		this.size = in.readInt();
 		this.array = new PostingUser[this.size];
