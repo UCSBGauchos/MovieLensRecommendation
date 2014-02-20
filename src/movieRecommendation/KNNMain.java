@@ -12,6 +12,7 @@ import org.apache.hadoop.io.ArrayFile;
 
 //Based on the paper "Efficient Multicore Collaborative Filtering", it will calculate top k similar neighbour songs of the given
 //song
+//No Reduce process for this KNN step
 public class KNNMain {
 	public static final K = 10;
 	public static void main(String [] args) throws Excpetion{
@@ -36,7 +37,7 @@ public class KNNMain {
 		FileSystem.get(job).delete(outputPath, true);
 		job.setOutputFormat(SequenceFileOutputFormat.class);
 		SequenceFileOutputFormat.setOutputPath(job, outputPath);
-		KnnDriver.run(job);
+		MainDriver.run(job);
 
 	}
 }
