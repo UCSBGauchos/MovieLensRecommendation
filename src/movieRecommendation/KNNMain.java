@@ -30,10 +30,10 @@ public class KNNMain {
 		job.setOutputValueClass(NeighboursArrayWritable.class);
 		
 		job.setInputFormat(SequenceFileInputFormat.class);
-		String inputPath = "input";
+		String inputPath = "KNNinput";
 		SequenceFileInputFormat.addInputPath(job, new Path(inputPath));
 		//each time remove the output folder first!
-		Path outputPath = new Path("output"));
+		Path outputPath = new Path("KNNoutput"));
 		FileSystem.get(job).delete(outputPath, true);
 		job.setOutputFormat(SequenceFileOutputFormat.class);
 		SequenceFileOutputFormat.setOutputPath(job, outputPath);

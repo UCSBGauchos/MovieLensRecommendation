@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class SortedArrayList<T> extends ArrayLisr<T>{
+public class SortedArrayList<T> extends ArrayList<T>{
 	public boolean add(T value) {
 		super.add(value);
 		Comparable<T> cmp = (Comparable<T>) value;
