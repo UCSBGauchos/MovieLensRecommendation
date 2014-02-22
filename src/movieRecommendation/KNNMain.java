@@ -1,5 +1,3 @@
-package movieRecommendation;
-
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -15,7 +13,7 @@ import org.apache.hadoop.io.ArrayFile;
 //No Reduce process for this KNN step
 public class KNNMain {
 	public static final int K = 10;
-	public static void main(String [] args) throws Excpetion{
+	public static void main(String [] args) throws Exception{
 		JobConf job = new JobConf();
 		job.setJobName(KNNMain.class.getSimpleName());
 		job.setJarByClass(KNNMain.class);
@@ -24,16 +22,16 @@ public class KNNMain {
 		job.setMapperClass(KNNMapper.class);
 		
 		job.setMapOutputKeyClass(LongWritable.class);
-		job.setMapOutputValueClass(NeighboursArrayWritable.class);
+		job.setMapOutputValueClass(NeighbourArray.class);
 		job.setNumReduceTasks(0);//no reduce for this step
 		job.setOutputKeyClass(LongWritable.class);
-		job.setOutputValueClass(NeighboursArrayWritable.class);
+		job.setOutputValueClass(NeighbourArray.class);
 		
 		job.setInputFormat(SequenceFileInputFormat.class);
 		String inputPath = "KNNinput";
 		SequenceFileInputFormat.addInputPath(job, new Path(inputPath));
 		//each time remove the output folder first!
-		Path outputPath = new Path("KNNoutput"));
+		Path outputPath = new Path("KNNoutput");
 		FileSystem.get(job).delete(outputPath, true);
 		job.setOutputFormat(SequenceFileOutputFormat.class);
 		SequenceFileOutputFormat.setOutputPath(job, outputPath);

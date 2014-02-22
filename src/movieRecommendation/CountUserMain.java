@@ -92,7 +92,7 @@ public class CountUserMain {
 	     conf.setInputFormat(TextInputFormat.class);
 	     conf.setOutputFormat(TextOutputFormat.class);
 	     FileInputFormat.setInputPaths(conf, new Path(args[0]));
-	     FileOutputFormat.setOutputPath(conf, new Path(args[1]));
-	     MainDriver.runJob(conf);
+	     FileOutputFormat.setOutputPath(conf, new Path("KNNInput"));
+	     MainDriver.run(conf);
 	   }
 }

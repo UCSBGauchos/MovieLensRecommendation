@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
 
-public class PostingUserArrayWritable {
+public class PostingUserArrayWritable implements Writable{
 	public int size = 0;
 	public PostingUser [] array;
 	

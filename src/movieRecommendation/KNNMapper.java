@@ -10,7 +10,7 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, PostingUserArrayWritable, LongWritable, NeighboursArray>{
+public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, PostingUserArrayWritable, LongWritable, NeighbourArray>{
 	
 	//movieID <userID, uverACG, rate>
 	public HashMap<Long, PostingUser[]> movieUsers;
@@ -35,7 +35,7 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 	
 	public void compareWithOthers(Reader reader) throws IOException{
 		int movieNum = movieUsers.size();
-		LongWritable key = new LongWritable;
+		LongWritable key = new LongWritable();
 		PostingUserArrayWritable value = new PostingUserArrayWritable();
 		Long [] movieIDs = new Long[movieNum];
 		movieUsers.keySet().toArray(movieIDs);
@@ -43,7 +43,7 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 			PostingUser[] usersForMoviei = movieUsers.get(movieIDs[i]);
 			while(reader.next(key, value)){
 				if(movieIDs[i]<key.get()){
-					compute(movieIDs[i], movieIDs[j], usersForMoviei, value.getPosting(), false);
+					compute(movieIDs[i], key.get(), usersForMoviei, value.getPosting(), false);
 				}
 			}
 		}

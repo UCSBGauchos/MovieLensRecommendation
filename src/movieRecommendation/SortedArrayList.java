@@ -10,8 +10,8 @@ public class SortedArrayList<T> extends ArrayList<T>{
 			set(i, get(i - 1));
 			set(i - 1, tmp);
 		}
-		if (size() > KNNMain.K)
-			super.remove(KNNMain.K);
+		if (size() > 10)
+			super.remove(10);
 		return true;
 	}
 }

@@ -21,7 +21,7 @@ public class Neighbour implements WritableComparable<Neighbour>{
 			return 1;
 		}else if(this.weight>other.weight){
 			return -1;
-		}else if(this.weight == other.weight){
+		}else{
 			return 0;
 		}
 	}

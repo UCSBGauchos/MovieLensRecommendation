@@ -11,14 +11,14 @@ import org.apache.hadoop.util.ProgramDriver;
 
 //preprpcess - preprpcess the data
 //KNN - get the neighbour based on the preprocessed data
-
+//result-TODO
 public class MainDriver {
 	public static void main(String [] argv){
 		int exitCode = -1;
 		ProgramDriver driver = new ProgramDriver();
 		try{
 			driver.addClass("preprocess", CountUserMain.class, "Get the preprocess result from the given dataset");
-			driver.addclass("KNN", KNNMain.class, "Do KNN Based on the preprocessed input data");
+			driver.addClass("KNN", KNNMain.class, "Do KNN Based on the preprocessed input data");
 			driver.driver(argv);
 			exitCode = 0;
 		}catch(Throwable e){
@@ -30,9 +30,9 @@ public class MainDriver {
 	
 	//each job defined in this system will call this run function, and the job will be submit to the jobtracker
 	//and it will run by job tracker of hadoop
-	public static void run(JobConf job) throws IOExecption{
+	public static void run(JobConf job) throws IOException{
 		job.setJarByClass(MainDriver.class);
-		JobClient.reunJob(job)
+		JobClient.runJob(job);
 	}
 	
 }

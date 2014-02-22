@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
 
-public class NeighbourArray {
+public class NeighbourArray implements Writable{
 	public int size;
 	public Neighbour [] array;
 	
