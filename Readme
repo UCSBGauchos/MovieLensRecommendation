@@ -10,13 +10,14 @@ Path:
 cd /Users/yangbo/Workspaces/MyEclipse\ 10/MovieLensRecommendation/src/movieRecommendation
 
 Compile your hadoop program:
-javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes CountUserMain.java MovieRating.java PostingUser.java PostingUserArrayWritable.java MainDriver.java 
+javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java PostingUser.java PostingUserArrayWritable.java CountUserMain.java Neighbour.java NeighbourArray.java KNNMapper.java KNNMapRunner.java KNNMain.java SortedArrayList.java MainDriver.java
+
 
 Greate a JAR file:
-jar -cvf countUser.jar -C classes/ .
+jar -cvf knn.jar -C classes/ .
 
 Run the program:
-Hadoop jar countUser.jar CountUserMain /input /output
+Hadoop jar knn.jar MainDrive /input /output
 
 Leave Safe Mode:
 hadoop dfsadmin -safemode leave
