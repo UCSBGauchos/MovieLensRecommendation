@@ -1,9 +1,7 @@
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.SequenceFileOutputFormat;
-import org.apache.hadoop.mapred.SequenceFileInputFormat;
+import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 import org.apache.hadoop.io.ArrayFile;
 
@@ -17,6 +15,7 @@ public class KNNMain {
 		JobConf job = new JobConf();
 		job.setJobName(KNNMain.class.getSimpleName());
 		job.setJarByClass(KNNMain.class);
+	
 		
 		job.setMapRunnerClass(KNNMapRunner.class);
 		job.setMapperClass(KNNMapper.class);
@@ -27,13 +26,15 @@ public class KNNMain {
 		job.setOutputKeyClass(LongWritable.class);
 		job.setOutputValueClass(NeighbourArray.class);
 		
+		
 		job.setInputFormat(SequenceFileInputFormat.class);
-		String inputPath = "KNNinput";
+		String inputPath = args[0];
 		SequenceFileInputFormat.addInputPath(job, new Path(inputPath));
 		//each time remove the output folder first!
 		Path outputPath = new Path("KNNoutput");
 		FileSystem.get(job).delete(outputPath, true);
-		job.setOutputFormat(SequenceFileOutputFormat.class);
+		
+		job.setOutputFormat(TextOutputFormat.class);
 		SequenceFileOutputFormat.setOutputPath(job, outputPath);
 		MainDriver.run(job);
 

@@ -16,8 +16,12 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 	public HashMap<Long, PostingUser[]> movieUsers;
 	public HashMap<Long, SortedArrayList<Neighbour>> similarityNieghbour = new HashMap<Long, SortedArrayList<Neighbour>>();
 	
+	public void configure(JobConf job) {
+		
+	}
+	
 	public void compareOwn(){
-		int movieNum = movieUsers.size();
+		int movieNum = movieUsers.keySet().size();
 		Long[] movieIDs = new Long[movieNum];
 		movieUsers.keySet().toArray(movieIDs);
 		
@@ -34,9 +38,10 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 	}
 	
 	public void compareWithOthers(Reader reader) throws IOException{
-		int movieNum = movieUsers.size();
+		int movieNum = movieUsers.keySet().size();
 		LongWritable key = new LongWritable();
 		PostingUserArrayWritable value = new PostingUserArrayWritable();
+		
 		Long [] movieIDs = new Long[movieNum];
 		movieUsers.keySet().toArray(movieIDs);
 		for(int i=0; i<movieNum-1; i++){
@@ -78,13 +83,16 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 						2);
 				calculationResult[2] += Math.pow((usersForMoviei[indexForI].rate - usersForMoviej[indexForJ].avgRating),
 						2);
+				indexForI++;
+				indexForJ++;
+				
 			}
 		}
 		float weightIJ = (float) (calculationResult[0] / Math.sqrt(calculationResult[1] * calculationResult[2]));
 		if(calculationResult[0]!=0){
 			if(own){
 				addNeighbour(iID, jID, weightIJ);
-				addNeighbour(indexForJ, jID, weightIJ);
+				addNeighbour(jID, iID, weightIJ);
 			}else{
 				addNeighbour(iID, jID, weightIJ);
 			}

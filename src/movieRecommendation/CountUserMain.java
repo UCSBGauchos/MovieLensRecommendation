@@ -90,7 +90,7 @@ public class CountUserMain {
 	     //conf.setCombinerClass(CountUserInfoReduce.class);
 	     conf.setReducerClass(CountUserInfoReduce.class);
 	     conf.setInputFormat(TextInputFormat.class);
-	     conf.setOutputFormat(TextOutputFormat.class);
+	     conf.setOutputFormat(SequenceFileOutputFormat.class);
 	     FileInputFormat.setInputPaths(conf, new Path(args[0]));
 	     FileOutputFormat.setOutputPath(conf, new Path("KNNInput"));
 	     MainDriver.run(conf);

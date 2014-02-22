@@ -22,7 +22,7 @@ public class KNNMapRunner extends MapRunner<LongWritable, PostingUserArrayWritab
 	
 	public void configure(JobConf job){
 		this.job = job;
-		path = new Path(job.get("mapinputfile"));
+		path = new Path(job.get("map.input.file"));
 		try{
 			hadoopFS = FileSystem.get(job);
 		}catch(IOException e){
