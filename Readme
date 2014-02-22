@@ -17,7 +17,7 @@ Greate a JAR file:
 jar -cvf knn.jar -C classes/ .
 
 Run the program:
-Hadoop jar knn.jar MainDrive /input /output
+Hadoop jar knn.jar MainDriver /input /output
 
 Leave Safe Mode:
 hadoop dfsadmin -safemode leave
