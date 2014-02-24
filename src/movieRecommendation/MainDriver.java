@@ -17,8 +17,10 @@ public class MainDriver {
 		int exitCode = -1;
 		ProgramDriver driver = new ProgramDriver();
 		try{
-			driver.addClass("preprocess", CountUserMain.class, "Get the preprocess result from the given dataset");
+			driver.addClass("preprocess", Preprocess.class, "Get the preprocess result from the given dataset");
 			driver.addClass("KNN", KNNMain.class, "Do KNN Based on the preprocessed input data");
+			driver.addClass("helloworld", HelloWorld.class, "Hello World");
+			driver.addClass("collectuser", CollectUser.class, "Collect User");
 			driver.driver(argv);
 			exitCode = 0;
 		}catch(Throwable e){

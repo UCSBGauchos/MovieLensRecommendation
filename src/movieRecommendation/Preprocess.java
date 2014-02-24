@@ -9,19 +9,20 @@ import org.apache.hadoop.util.*;
 
 
 
-public class CountUserMain {
+public class Preprocess {
 	
-	public static class CountUserInfoMap extends MapReduceBase implements Mapper<LongWritable, Text, LongWritable, PostingUser>{
+	public static class CountUserInfoMap extends MapReduceBase implements Mapper<Object, Text, LongWritable, PostingUser>{
 		//public IntWritable one = new IntWritable(1);
 		public long previousUserID = -1;
-		public int totalRate;
+		public int totalRate = 0;
 		public int ratingNumber = 0;
 		public PostingUser userValue = new PostingUser();
 		public float avgRating = 0;
 		public ArrayList<MovieRating> movieRatingList = new ArrayList<MovieRating>();
-		public void map(LongWritable unusedInKey, Text inValue, OutputCollector<LongWritable, PostingUser> output, Reporter reporter) throws IOException{
+		public void map(Object unusedInKey, Text inValue, OutputCollector<LongWritable, PostingUser> output, Reporter reporter) throws IOException{			
+			//eachline get four elements
 			String eachLine = inValue.toString();
-			StringTokenizer token = new StringTokenizer(eachLine, " |\t");
+			StringTokenizer token = new StringTokenizer(eachLine);
 			long uID = Long.parseLong(token.nextToken());
 			LongWritable userID = new LongWritable(uID);
 			long mID = Long.parseLong(token.nextToken());
@@ -30,35 +31,12 @@ public class CountUserMain {
 			IntWritable rating = new IntWritable(r);
 			Long d = Long.parseLong(token.nextToken());
 			LongWritable date = new LongWritable(d); 
-			//when uID != previousone, a new user section begin
-			//else just continue one user section
+			
+			
 			if(uID!=previousUserID){
-				int currentUserNum = movieRatingList.size();
-				//if curNum = 0, just begin, just initial the attributes
-				//if curNum!= 0, means one user end, need to calculate the avg of the previous user, add ont outout case, and then clear and go to the next one
-				if(currentUserNum == 0){
-					totalRate = 0;
-					ratingNumber = 0;
-					movieRatingList.clear();
-					totalRate+=r;
-					movieRatingList.add(new MovieRating(mID, r));
-					previousUserID = uID;
-				}else if(currentUserNum != 0){
-					avgRating = totalRate/currentUserNum;
-					for(int i=0; i<currentUserNum; i++){
-						LongWritable movieIDKey = new LongWritable(movieRatingList.get(i).movieID);
-						userValue.set(previousUserID, avgRating, movieRatingList.get(i).rate);
-						output.collect(movieIDKey, userValue);
-					}
-					totalRate = 0;
-					ratingNumber = 0;
-					movieRatingList.clear();
-					totalRate+=r;
-					movieRatingList.add(new MovieRating(mID, r));
-					previousUserID = uID;
-				}
+				
 			}else{
-				totalRate+=r;
+				
 				movieRatingList.add(new MovieRating(mID, r));
 			}
 		}
@@ -80,7 +58,7 @@ public class CountUserMain {
 
 	
 	public static void main(String[] args) throws Exception {
-	     JobConf conf = new JobConf(CountUserMain.class);
+	     JobConf conf = new JobConf(Preprocess.class);
 	     conf.setJobName("preprocess");
 	     conf.setMapOutputKeyClass(LongWritable.class);
 	     conf.setMapOutputValueClass(PostingUser.class);
@@ -90,7 +68,8 @@ public class CountUserMain {
 	     //conf.setCombinerClass(CountUserInfoReduce.class);
 	     conf.setReducerClass(CountUserInfoReduce.class);
 	     conf.setInputFormat(TextInputFormat.class);
-	     conf.setOutputFormat(SequenceFileOutputFormat.class);
+	     conf.setOutputFormat(TextOutputFormat.class);
+	     //conf.setOutputFormat(SequenceFileOutputFormat.class);
 	     FileInputFormat.setInputPaths(conf, new Path(args[0]));
 	     FileOutputFormat.setOutputPath(conf, new Path("KNNInput"));
 	     MainDriver.run(conf);
