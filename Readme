@@ -10,7 +10,7 @@ Path:
 cd /Users/yangbo/Workspaces/MyEclipse\ 10/MovieLensRecommendation/src/movieRecommendation
 
 Compile your hadoop program:
-javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java PostingUser.java PostingUserArrayWritable.java CountUserMain.java Neighbour.java NeighbourArray.java KNNMapper.java KNNMapRunner.java KNNMain.java SortedArrayList.java MainDriver.java
+avac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java Preprocess.java Neighbour.java NeighbourArray.java KNNMapper.java KNNMapRunner.java KNNMain.java SortedArrayList.java HelloWorld.java MainDriver.java
 
 Greate a JAR file:
 jar -cvf knn.jar -C classes/ .
@@ -43,4 +43,10 @@ movieID(key) [userID userAvgRate specificRate](value)
 
 2-17:
 MainDriver (Trigger, choose function to run) + KNNDriverMain(Step two, process of the preprocessed data)
+
+2-23:
+Modify the program structure:Tree steps for the data process
+1. Collect User: Collect User Data from the original dataset
+2. Preprocess: preprocess the data based on the collected dataset
+3. KNN
 
