@@ -10,14 +10,15 @@ Path:
 cd /Users/yangbo/Workspaces/MyEclipse\ 10/MovieLensRecommendation/src/movieRecommendation
 
 Compile your hadoop program:
-avac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java Preprocess.java Neighbour.java NeighbourArray.java KNNMapper.java KNNMapRunner.java KNNMain.java SortedArrayList.java HelloWorld.java MainDriver.java
+javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java Preprocess.java Neighbour.java NeighbourArray.java KNNMapper.java KNNMapRunner.java KNNMain.java SortedArrayList.java HelloWorld.java MainDriver.java 
 
 Greate a JAR file:
 jar -cvf knn.jar -C classes/ .
 
-Run the program: Two Step
-Hadoop jar knn.jar MainDriver preprocess /input 
-Hadoop jar knn.jar MainDriver KNN /preprocess 
+Run the program: countuser->preprocess->KNN
+Path: /input -> /user/yangbo/Collect -> /user/yangbo/Preprocess
+jar knn.jar MainDriver collectuser /input
+Hadoop jar knn.jar MainDriver preprocess
 
 
 Leave Safe Mode:
