@@ -49,10 +49,10 @@ public class CollectUser {
 	     //conf.setCombinerClass(CountUserInfoReduce.class);
 	     conf.setReducerClass(CollectUserReduce.class);
 	     conf.setInputFormat(TextInputFormat.class);
-	     conf.setOutputFormat(TextOutputFormat.class);
+	     conf.setOutputFormat(SequenceFileOutputFormat.class);
 	     //conf.setOutputFormat(SequenceFileOutputFormat.class);
 	     FileInputFormat.setInputPaths(conf, new Path(args[0]));
-	     FileOutputFormat.setOutputPath(conf, new Path("Collect"));
+	     FileOutputFormat.setOutputPath(conf, new Path(args[1]));
 	     MainDriver.run(conf);
 	}
 	

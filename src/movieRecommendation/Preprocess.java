@@ -11,33 +11,28 @@ import org.apache.hadoop.util.*;
 
 public class Preprocess {
 	
-	public static class CountUserInfoMap extends MapReduceBase implements Mapper<Object, Text, LongWritable, PostingUser>{
-		//public IntWritable one = new IntWritable(1);
-		public long previousUserID = -1;
-		public int totalRate = 0;
-		public int ratingNumber = 0;
+	public static class CountUserInfoMap extends MapReduceBase implements Mapper<LongWritable, MovieRatingArrayWritable, LongWritable, PostingUser>{
+		public LongWritable movieID = new LongWritable();
 		public PostingUser userValue = new PostingUser();
+		
+		public long userID;
+		public int ratingNumber = 0;
+		public float totalRating;
 		public float avgRating = 0;
-		public ArrayList<MovieRating> movieRatingList = new ArrayList<MovieRating>();
-		public void map(Object unusedInKey, Text inValue, OutputCollector<LongWritable, PostingUser> output, Reporter reporter) throws IOException{			
-			//eachline get four elements
-			String eachLine = inValue.toString();
-			StringTokenizer token = new StringTokenizer(eachLine);
-			long uID = Long.parseLong(token.nextToken());
-			LongWritable userID = new LongWritable(uID);
-			long mID = Long.parseLong(token.nextToken());
-			LongWritable movieID = new LongWritable(mID);
-			int r = Integer.parseInt(token.nextToken());
-			IntWritable rating = new IntWritable(r);
-			Long d = Long.parseLong(token.nextToken());
-			LongWritable date = new LongWritable(d); 
-			
-			
-			if(uID!=previousUserID){
-				
-			}else{
-				
-				movieRatingList.add(new MovieRating(mID, r));
+		public void map(LongWritable key, MovieRatingArrayWritable value, OutputCollector<LongWritable, PostingUser> output, Reporter reporter) throws IOException{			
+			totalRating = 0;
+			userID = key.get();
+			MovieRating [] array = value.getPosting();
+			ratingNumber = array.length;
+			for(int index = 0; index<ratingNumber; index++){
+				totalRating+=array[index].rate;
+			}
+			avgRating = totalRating/ratingNumber;
+			for(int index = 0; index<ratingNumber; index++){
+				long mID = array[index].movieID;
+				movieID.set(mID);
+				userValue.set(userID, avgRating, array[index].rate);
+				output.collect(movieID, userValue);
 			}
 		}
 	}
@@ -67,11 +62,11 @@ public class Preprocess {
 	     conf.setMapperClass(CountUserInfoMap.class);
 	     //conf.setCombinerClass(CountUserInfoReduce.class);
 	     conf.setReducerClass(CountUserInfoReduce.class);
-	     conf.setInputFormat(TextInputFormat.class);
+	     conf.setInputFormat(SequenceFileInputFormat.class);
 	     conf.setOutputFormat(TextOutputFormat.class);
 	     //conf.setOutputFormat(SequenceFileOutputFormat.class);
 	     FileInputFormat.setInputPaths(conf, new Path(args[0]));
-	     FileOutputFormat.setOutputPath(conf, new Path("KNNInput"));
+	     FileOutputFormat.setOutputPath(conf, new Path(args[1]));
 	     MainDriver.run(conf);
 	   }
 }
