@@ -1,6 +1,6 @@
 import java.io.IOException;
 import java.util.*;
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
@@ -11,7 +11,7 @@ public class CollectUser {
 		MovieRating movieInfo = new MovieRating();
 		public void map(Object unusedInKey, Text inValue, OutputCollector<LongWritable, MovieRating> output, Reporter reporter) throws IOException{			
 			String eachLine = inValue.toString();
-			StringTokenizer token = new StringTokenizer(eachLine, " ");
+			StringTokenizer token = new StringTokenizer(eachLine, " |\t");
 			long uID = Long.parseLong(token.nextToken());
 			LongWritable userID = new LongWritable(uID);
 			long mID = Long.parseLong(token.nextToken());
@@ -52,7 +52,8 @@ public class CollectUser {
 	     conf.setOutputFormat(SequenceFileOutputFormat.class);
 	     //conf.setOutputFormat(SequenceFileOutputFormat.class);
 	     FileInputFormat.setInputPaths(conf, new Path(args[0]));
-	     FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+	     FileSystem.get(conf).delete(new Path("Collect"), true);
+	     FileOutputFormat.setOutputPath(conf, new Path("Collect"));
 	     MainDriver.run(conf);
 	}
 	

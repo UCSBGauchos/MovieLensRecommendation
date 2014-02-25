@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.util.*;
 
-import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.fs.*;
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
@@ -65,8 +65,10 @@ public class Preprocess {
 	     conf.setInputFormat(SequenceFileInputFormat.class);
 	     conf.setOutputFormat(TextOutputFormat.class);
 	     //conf.setOutputFormat(SequenceFileOutputFormat.class);
-	     FileInputFormat.setInputPaths(conf, new Path(args[0]));
-	     FileOutputFormat.setOutputPath(conf, new Path(args[1]));
+	     FileInputFormat.setInputPaths(conf, new Path("Collect"));
+	     //each time remove the outpt first
+	     FileSystem.get(conf).delete(new Path("Preprocess"), true);
+	     FileOutputFormat.setOutputPath(conf, new Path("Preprocess"));
 	     MainDriver.run(conf);
 	   }
 }
