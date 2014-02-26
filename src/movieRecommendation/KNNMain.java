@@ -21,10 +21,10 @@ public class KNNMain {
 		job.setMapperClass(KNNMapper.class);
 		
 		job.setMapOutputKeyClass(LongWritable.class);
-		job.setMapOutputValueClass(NeighbourArray.class);
+		job.setMapOutputValueClass(NeighbourArrayWritable.class);
 		job.setNumReduceTasks(0);//no reduce for this step
 		job.setOutputKeyClass(LongWritable.class);
-		job.setOutputValueClass(NeighbourArray.class);
+		job.setOutputValueClass(NeighbourArrayWritable.class);
 		
 		
 		job.setInputFormat(SequenceFileInputFormat.class);

@@ -4,15 +4,15 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
 
-public class NeighbourArray implements Writable{
+public class NeighbourArrayWritable implements Writable{
 	public int size;
 	public Neighbour [] array;
 	
-	public NeighbourArray(){
+	public NeighbourArrayWritable(){
 		
 	}
 	
-	public NeighbourArray(Neighbour[] values) {
+	public NeighbourArrayWritable(Neighbour[] values) {
 		this.size = values.length;
 		this.array = values;
 	} 

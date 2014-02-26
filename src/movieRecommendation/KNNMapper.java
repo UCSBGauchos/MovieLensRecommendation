@@ -10,7 +10,7 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, PostingUserArrayWritable, LongWritable, NeighbourArray>{
+public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, PostingUserArrayWritable, LongWritable, NeighbourArrayWritable>{
 	
 	//movieID <userID, uverACG, rate>
 	public HashMap<Long, PostingUser[]> movieUsers;
@@ -20,14 +20,14 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 		
 	}
 	
-	public void map(LongWritable unusedKey, PostingUserArrayWritable unusedValue, OutputCollector<LongWritable, NeighbourArray> output, Reporter reporter) throws IOException {
+	public void map(LongWritable unusedKey, PostingUserArrayWritable unusedValue, OutputCollector<LongWritable, NeighbourArrayWritable> output, Reporter reporter) throws IOException {
 		Iterator<Long> itr = similarityNieghbour.keySet().iterator();
 		while(itr.hasNext()){
 			long movieID = itr.next();
 			SortedArrayList<Neighbour> neighbourhood = similarityNieghbour.get(movieID);
 			Neighbour[] toArray = new Neighbour[neighbourhood.size()];
 			neighbourhood.toArray(toArray);// debug this
-			output.collect(new LongWritable(movieID), new NeighbourArray(toArray));
+			output.collect(new LongWritable(movieID), new NeighbourArrayWritable(toArray));
 		}
 	}
 	
