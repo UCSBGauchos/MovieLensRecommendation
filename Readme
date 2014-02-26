@@ -28,10 +28,15 @@ javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d c
 Greate a JAR file:
 jar -cvf knn.jar -C classes/ .
 
+Remove your input
+hadoop fs -rmr /input
+
 Run the program: countuser->preprocess->KNN
 Path: /input -> /user/yangbo/Collect -> /user/yangbo/Preprocess
-jar knn.jar MainDriver collectuser /input
+Hadoop jar knn.jar MainDriver collectuser /input
 Hadoop jar knn.jar MainDriver preprocess
+Hadoop jar knn.jar MainDriver knn
+
 
 Schedual:
 
