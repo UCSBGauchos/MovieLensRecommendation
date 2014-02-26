@@ -20,6 +20,17 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 		
 	}
 	
+	public void map(LongWritable unusedKey, PostingUserArrayWritable unusedValue, OutputCollector<LongWritable, NeighbourArray> output, Reporter reporter) throws IOException {
+		Iterator<Long> itr = similarityNieghbour.keySet().iterator();
+		while(itr.hasNext()){
+			long movieID = itr.next();
+			SortedArrayList<Neighbour> neighbourhood = similarityNieghbour.get(movieID);
+			Neighbour[] toArray = new Neighbour[neighbourhood.size()];
+			neighbourhood.toArray(toArray);// debug this
+			output.collect(new LongWritable(movieID), new NeighbourArray(toArray));
+		}
+	}
+	
 	public void compareOwn(){
 		int movieNum = movieUsers.keySet().size();
 		Long[] movieIDs = new Long[movieNum];
@@ -54,16 +65,7 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 		}
 	}
 	
-	public void dumpNeighbours(OutputCollector output) throws IOException{
-		Iterator<Long> itr = similarityNieghbour.keySet().iterator();
-		while(itr.hasNext()){
-			long movieID = itr.next();
-			SortedArrayList<Neighbour> neighbourhood = similarityNieghbour.get(movieID);
-			Neighbour[] toArray = new Neighbour[neighbourhood.size()];
-			neighbourhood.toArray(toArray);// debug this
-			output.collect(new LongWritable(movieID), new NeighbourArray(toArray));
-		}
-	}
+	
 	
 	//four paras
 	public void compute(long iID, long jID, PostingUser[] usersForMoviei, PostingUser[] usersForMoviej, Boolean own){
@@ -111,11 +113,7 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 		}
 	}
 	
-	//map, usr dump to add the result to the output
-	public void map(LongWritable arg0, PostingUserArrayWritable arg1,
-			OutputCollector<LongWritable, NeighbourArray> out, Reporter arg3)
-			throws IOException {
-		dumpNeighbours(out);
-	}
+	
+	
 
 }

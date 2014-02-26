@@ -30,8 +30,6 @@ public class KNNMapRunner extends MapRunner<LongWritable, PostingUserArrayWritab
 		}
 	}
 	
-	//input key is longwritable, input value is postingUser array, read it drom the input file,
-	//save them in the local hashmap
 	public void run(RecordReader input, OutputCollector output, Reporter reporter) throws IOException {
 		LongWritable key = new LongWritable();
 		PostingUserArrayWritable value = new PostingUserArrayWritable();
@@ -43,17 +41,17 @@ public class KNNMapRunner extends MapRunner<LongWritable, PostingUserArrayWritab
 		//here call compareOwn to get neighbour in my own file
 		mapper.compareOwn();
 		
-		//get all the other preprocessed file from hadoop file system, get get neighbour
-		FileStatus[] fStatus = hadoopFS.listStatus(path.getParent());
+		//get all the other preprocessed file from hadoop file system, get neighbour
+//		FileStatus[] fStatus = hadoopFS.listStatus(path.getParent());
 		long t = System.nanoTime();
-		for (int currentFile = 1; currentFile < fStatus.length; currentFile++){
-			Path currentPath = fStatus[currentFile].getPath();
-			if(hadoopFS.isFile(currentPath)&&(!currentPath.equals(path))){
-				System.err.println("Reading:" + currentPath.getName());
-				Reader reader = new SequenceFile.Reader(hadoopFS, currentPath, job);
-				mapper.compareWithOthers(reader);
-			}
-		}
+//		for (int currentFile = 1; currentFile < fStatus.length; currentFile++){
+//			Path currentPath = fStatus[currentFile].getPath();
+//			if(hadoopFS.isFile(currentPath)&&(!currentPath.equals(path))){
+//				System.err.println("Reading:" + currentPath.getName());
+//				Reader reader = new SequenceFile.Reader(hadoopFS, currentPath, job);
+//				mapper.compareWithOthers(reader);
+//			}
+//		}
 		System.out.println("Similarity comparison time in millisec:" + (System.nanoTime() - t)
 				/ 1000000.0);
 		//call the map function
