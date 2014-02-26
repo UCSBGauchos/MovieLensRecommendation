@@ -52,7 +52,7 @@ movieID(key) [userID userAvgRate specificRate](value)
 MainDriver (Trigger, choose function to run) + KNNDriverMain(Step two, process of the preprocessed data)
 
 2-23:
-Modify the program structure:Tree steps for the data process
+Modify the program structure:Three steps for the data process
 1. Collect User: Collect User Data from the original dataset
 2. Preprocess: preprocess the data based on the collected dataset
 3. KNN
