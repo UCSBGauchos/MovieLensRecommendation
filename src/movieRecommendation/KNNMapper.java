@@ -71,7 +71,7 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 	public void compute(long iID, long jID, PostingUser[] usersForMoviei, PostingUser[] usersForMoviej, Boolean own){
 		int indexForI = 0;
 		int indexForJ = 0;
-		double [] calculationResult = new double[3];
+		float [] calculationResult = new float[3];
 		while((indexForI<usersForMoviei.length)&&(indexForJ<usersForMoviej.length)){
 			if(usersForMoviei[indexForI].userID<usersForMoviej[indexForJ].userID){
 				indexForI++;
@@ -79,11 +79,11 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 				indexForJ++;
 			}else{
 				// + songjUsers[jPoint].avgRating + ")");
-				calculationResult[0] += ((usersForMoviei[indexForI].rate - usersForMoviej[indexForJ].avgRating) * (usersForMoviej[indexForJ].rate - usersForMoviej[indexForJ].avgRating));
+				calculationResult[0] += ((usersForMoviei[indexForI].rate - usersForMoviei[indexForI].avgRating) * (usersForMoviej[indexForJ].rate - usersForMoviej[indexForJ].avgRating));
 
-				calculationResult[1] += Math.pow((usersForMoviei[indexForI].rate - usersForMoviej[indexForJ].avgRating),
+				calculationResult[1] += Math.pow((usersForMoviej[indexForJ].rate - usersForMoviej[indexForJ].avgRating),
 						2);
-				calculationResult[2] += Math.pow((usersForMoviei[indexForI].rate - usersForMoviej[indexForJ].avgRating),
+				calculationResult[2] += Math.pow((usersForMoviei[indexForI].rate - usersForMoviei[indexForI].avgRating),
 						2);
 				indexForI++;
 				indexForJ++;
