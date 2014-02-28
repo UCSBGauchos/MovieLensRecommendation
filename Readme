@@ -23,7 +23,7 @@ hadoop fs -mkdir /input
 hadoop fs -put simple /input
 
 Compile your hadoop program:
-javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java Preprocess.java Neighbour.java NeighbourArray.java KNNMapper.java KNNMapRunner.java KNNMain.java SortedArrayList.java HelloWorld.java MainDriver.java 
+javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java Preprocess.java Neighbour.java NeighbourArrayWritable.java KNNMapper.java KNNMapRunner.java KNNMain.java SortedArrayList.java HelloWorld.java Query.java MainDriver.java 
 
 Greate a JAR file:
 jar -cvf knn.jar -C classes/ .
