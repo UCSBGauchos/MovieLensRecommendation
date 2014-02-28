@@ -31,7 +31,7 @@ public class KNNMain {
 		SequenceFileInputFormat.addInputPath(job, new Path("Preprocess"));
 		//each time remove the output folder first!
 		FileSystem.get(job).delete(new Path("KNN"), true);
-		job.setOutputFormat(TextOutputFormat.class);
+		job.setOutputFormat(SequenceFileOutputFormat.class);
 		SequenceFileOutputFormat.setOutputPath(job, new Path("KNN"));
 		MainDriver.run(job);
 

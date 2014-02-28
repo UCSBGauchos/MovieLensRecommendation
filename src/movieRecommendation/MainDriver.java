@@ -21,6 +21,7 @@ public class MainDriver {
 			driver.addClass("knn", KNNMain.class, "Do KNN Based on the preprocessed input data");
 			driver.addClass("helloworld", HelloWorld.class, "Hello World");
 			driver.addClass("collectuser", CollectUser.class, "Collect User");
+			driver.addClass("start", Query.class, "Start predicting the rating. Make sure you have run collect, preprocess and knn command");
 			driver.driver(argv);
 			exitCode = 0;
 		}catch(Throwable e){

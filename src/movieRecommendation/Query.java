@@ -12,36 +12,36 @@ import org.apache.hadoop.mapred.JobConf;
 public class Query {
 	public static void main(String [] args) throws IOException {
 		JobConf job = new JobConf();
-		Path queryPath = new Path("query");
-		FileSystem hadoopFS = queryPath.getFileSystem(job);
-		if(hadoopFS.exists(queryPath)){
-			throw new UnsupportedEncodingException("Query is not set");
-		}
-		
-		FSDataInputStream in = hdfs.open(queryPath);
-		String line;
+//		Path queryPath = new Path("query");
+//		FileSystem hadoopFS = queryPath.getFileSystem(job);
+//		if(hadoopFS.exists(queryPath)){
+//			throw new UnsupportedEncodingException("Query is not set");
+//		}
+//		
+//		FSDataInputStream in = hadoopFS.open(queryPath);
+//		String line;
 		
 		//input the id of the movie
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.print("Enter movie id of the movie you want its predicted rate: ");
-		String movieID = br.readLine();
+//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		System.out.print("Enter movie id of the movie you want its predicted rate: ");
+//		String movieID = br.readLine();
 
-		Path KNNResult=new Path("/user/yangbo/KNN/part-00000");
-		System.out.println(KNNResult.toString());
+		//neighbour: read from KNNData
+		//user: read From UserData
 		
-		//use reader to get the key and value: [mi neighbour(mj wij)] 
-		KNNResult.Reader reader = new KNNResult.Reader(hadoopFS, KNNResult.toString(). new Configuration());
-		LongWritable midKey = new LongWritable(Integer.parseInt(movieID));
-		NeighbourArrayWritable neighborhoodValue = new NeighbourArrayWritable();
-		reader.get(midKey, neighborhoodValue);
-		System.out.println("The movie "+movieID+"'s neighbour is "+neighborhoodValue.toString());
-		
-		//here also need to process each user from the input dataset, read each line from the input dataset
-		while ((line = in.readLine()) != null) {
-			StringTokenizer token = new StringTokenizer(line.toString(), " |\t");
-			long userID  = Long.parseLong(token.nextToken());
-			
+		Path KNNResult=new Path("KNN/part-00000");
+		FileSystem hadoopFS = KNNResult.getFileSystem(job);
+		if(!hadoopFS.exists(new Path("KNN"))){
+			throw new UnsupportedEncodingException("KNN is not set");
 		}
+		FSDataInputStream KNNData = hadoopFS.open(KNNResult);
+		
+		Path UserResult=new Path("/input/u1.test");
+		if(!hadoopFS.exists(new Path("/input"))){
+			throw new UnsupportedEncodingException("KNN is not set");
+		}
+		FSDataInputStream UserData = hadoopFS.open(UserResult);
+		
 		
 		
 	}
