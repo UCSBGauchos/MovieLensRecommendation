@@ -11,7 +11,6 @@ public class CollectUser {
 		MovieRating movieInfo = new MovieRating();
 		public void map(Object unusedInKey, Text inValue, OutputCollector<LongWritable, MovieRating> output, Reporter reporter) throws IOException{			
 			String eachLine = inValue.toString();
-			StringTokenizer token = new StringTokenizer(eachLine, " |\t");
 			long uID = Long.parseLong(token.nextToken());
 			LongWritable userID = new LongWritable(uID);
 			long mID = Long.parseLong(token.nextToken());
