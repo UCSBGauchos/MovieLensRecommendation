@@ -20,6 +20,7 @@ public class KNNMain {
 	     //conf.setOutputKeyClass(LongWritable.class);
 	     //conf.setOutputValueClass(PostingUserArrayWritable.class);
 	     conf.setMapRunnerClass(KNNMapRunner.class);
+	     conf.setMapperClass(KNNMapper.class);
 	     //conf.setCombinerClass(CountUserInfoReduce.class);
 	     //conf.setReducerClass(CountUserInfoReduce.class);
 	     conf.setInputFormat(SequenceFileInputFormat.class);
