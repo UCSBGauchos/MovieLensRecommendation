@@ -31,12 +31,12 @@ jar -cvf knn.jar -C classes/ .
 Remove your input
 hadoop fs -rmr /input
 
-Run the program: countuser->preprocess->KNN
+Run the program: countuser->preprocess->KNN->start
 Path: /input -> /user/yangbo/Collect -> /user/yangbo/Preprocess
 Hadoop jar knn.jar MainDriver collectuser /input
 Hadoop jar knn.jar MainDriver preprocess
 Hadoop jar knn.jar MainDriver knn
-
+Hadoop jar knn.jar MainDriver start
 
 Schedual:
 
@@ -63,3 +63,6 @@ Finish Collect User and Preprocess
 2-26
 KNN algorithm to calculate the neighbour of a specific song based on the user information. Assume just one file by now
 
+3-1
+Finish the query. Let the user to input the userID and the movieID, if the movie has not been rated, we will predict the 
+rating which this user may give to the movie.
