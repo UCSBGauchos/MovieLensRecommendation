@@ -10,30 +10,26 @@ import org.apache.hadoop.io.ArrayFile;
 //song
 //No Reduce process for this KNN step
 public class KNNMain {
-	public static final int K = 10;
 	public static void main(String [] args) throws Exception{
-		JobConf job = new JobConf();
-		job.setJobName(KNNMain.class.getSimpleName());
-		job.setJarByClass(KNNMain.class);
-	
-		
-		job.setMapRunnerClass(KNNMapRunner.class);
-		job.setMapperClass(KNNMapper.class);
-		
-		job.setMapOutputKeyClass(LongWritable.class);
-		job.setMapOutputValueClass(NeighbourArrayWritable.class);
-		job.setNumReduceTasks(0);//no reduce for this step
-		job.setOutputKeyClass(LongWritable.class);
-		job.setOutputValueClass(NeighbourArrayWritable.class);
-		
-		
-		job.setInputFormat(SequenceFileInputFormat.class);
-		SequenceFileInputFormat.addInputPath(job, new Path("Preprocess"));
-		//each time remove the output folder first!
-		FileSystem.get(job).delete(new Path("KNN"), true);
-		job.setOutputFormat(SequenceFileOutputFormat.class);
-		SequenceFileOutputFormat.setOutputPath(job, new Path("KNN"));
-		MainDriver.run(job);
+		 JobConf conf = new JobConf(KNNMain.class);
+	     conf.setJobName("knn");
+	     conf.setMapOutputKeyClass(LongWritable.class);
+	     conf.setMapOutputValueClass(NeighbourArrayWritable.class);
+	     conf.setNumMapTasks(1);
+	     conf.setNumReduceTasks(0);
+	     //conf.setOutputKeyClass(LongWritable.class);
+	     //conf.setOutputValueClass(PostingUserArrayWritable.class);
+	     conf.setMapRunnerClass(KNNMapRunner.class);
+	     //conf.setCombinerClass(CountUserInfoReduce.class);
+	     //conf.setReducerClass(CountUserInfoReduce.class);
+	     conf.setInputFormat(SequenceFileInputFormat.class);
+	     //conf.setOutputFormat(TextOutputFormat.class);
+	     conf.setOutputFormat(TextOutputFormat.class);
+	     FileInputFormat.setInputPaths(conf, new Path("Preprocess"));
+	     //each time remove the outpt first
+	     FileSystem.get(conf).delete(new Path("KNN"), true);
+	     FileOutputFormat.setOutputPath(conf, new Path("KNN"));
+	     MainDriver.run(conf);
 
 	}
 }

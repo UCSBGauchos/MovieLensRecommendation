@@ -63,8 +63,8 @@ public class Preprocess {
 	     //conf.setCombinerClass(CountUserInfoReduce.class);
 	     conf.setReducerClass(CountUserInfoReduce.class);
 	     conf.setInputFormat(SequenceFileInputFormat.class);
+	     //conf.setOutputFormat(TextOutputFormat.class);
 	     conf.setOutputFormat(SequenceFileOutputFormat.class);
-	     //conf.setOutputFormat(SequenceFileOutputFormat.class);
 	     FileInputFormat.setInputPaths(conf, new Path("Collect"));
 	     //each time remove the outpt first
 	     FileSystem.get(conf).delete(new Path("Preprocess"), true);

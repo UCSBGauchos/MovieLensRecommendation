@@ -41,15 +41,15 @@ public class Query {
 		}
 		FSDataInputStream KNNData = hadoopFS.open(KNNResult);
 		
-		Path UserResult=new Path("/input/u1.test");
-		if(!hadoopFS.exists(new Path("/input"))){
-			throw new UnsupportedEncodingException("KNN is not set");
-		}
-		FSDataInputStream UserData = hadoopFS.open(UserResult);
+//		Path UserResult=new Path("/input/u1.test");
+//		if(!hadoopFS.exists(new Path("/input"))){
+//			throw new UnsupportedEncodingException("KNN is not set");
+//		}
+//		FSDataInputStream UserData = hadoopFS.open(UserResult);
 		
 		String neighbourtLine;
 		while ((neighbourtLine = KNNData.readLine()) != null){
-			//System.out.println(line.toString());
+			System.out.println(neighbourtLine.toString());
 			StringTokenizer token = new StringTokenizer(neighbourtLine.toString(), " |\t,");
 			String mid = token.nextToken();
 			if(mid.equals(movieID)){
@@ -60,25 +60,30 @@ public class Query {
 				}
 			}
 		}
-		//System.out.println(localHash);
-		String userLine;
-		while ((userLine = UserData.readLine()) != null){
-			StringTokenizer token = new StringTokenizer(userLine.toString(), " |\t");
-			while(token.hasMoreTokens()){
-				String uid = token.nextToken();
-				String mid = token.nextToken();
-				Integer rating = Integer.parseInt(token.nextToken());
-				String time = token.nextToken();
-				if(uid.equals(userID)){
-					localUserRating.put(mid, rating);
-				}
-			}
-		}
-		if(localUserRating.keySet().contains(movieID)){
-			System.out.println("User "+userID+" has rated "+localUserRating.get(movieID)+" to the movie "+movieID+" no need to predict");
-		}else{
-			System.out.println("Need to predict the rating which "+userID+" gives to the movie "+movieID);
-			
-		}
+		System.out.println(localHash);
+//		//System.out.println(localHash);
+//		String userLine;
+//		while ((userLine = UserData.readLine()) != null){
+//			StringTokenizer token = new StringTokenizer(userLine.toString(), " |\t");
+//			while(token.hasMoreTokens()){
+//				String uid = token.nextToken();
+//				String mid = token.nextToken();
+//				Integer rating = Integer.parseInt(token.nextToken());
+//				String time = token.nextToken();
+//				if(uid.equals(userID)){
+//					localUserRating.put(mid, rating);
+//				}
+//			}
+//		}
+//		if(localUserRating.keySet().contains(movieID)){
+//			System.out.println("User "+userID+" has rated "+localUserRating.get(movieID)+" to the movie "+movieID+" no need to predict");
+//		}else{
+//			System.out.println("Need to predict the rating which "+userID+" gives to the movie "+movieID);
+//			if(localHash.size()==0){
+//				System.out.println("No record for "+movieID);
+//			}else{
+//				System.out.println(localHash);
+//			}
+//		}
 	}
 }

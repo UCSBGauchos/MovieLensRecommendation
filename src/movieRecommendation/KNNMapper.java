@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -14,7 +15,7 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 	
 	//movieID <userID, uverACG, rate>
 	public HashMap<Long, PostingUser[]> movieUsers;
-	public HashMap<Long, SortedArrayList<Neighbour>> similarityNieghbour = new HashMap<Long, SortedArrayList<Neighbour>>();
+	public HashMap<Long, ArrayList<Neighbour>> similarityNieghbour = new HashMap<Long, ArrayList<Neighbour>>();
 	
 	public void configure(JobConf job) {
 		
@@ -24,7 +25,7 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 		Iterator<Long> itr = similarityNieghbour.keySet().iterator();
 		while(itr.hasNext()){
 			long movieID = itr.next();
-			SortedArrayList<Neighbour> neighbourhood = similarityNieghbour.get(movieID);
+			ArrayList<Neighbour> neighbourhood = similarityNieghbour.get(movieID);
 			Neighbour[] toArray = new Neighbour[neighbourhood.size()];
 			neighbourhood.toArray(toArray);// debug this
 			output.collect(new LongWritable(movieID), new NeighbourArrayWritable(toArray));
@@ -37,33 +38,35 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 		movieUsers.keySet().toArray(movieIDs);
 		
 		//get the usetPostingInfo for each pair movie i and j
-		for(int i=0; i<movieNum-1; i++){
+		for(int i=0; i<movieNum; i++){
 			PostingUser[] usersForMoviei = movieUsers.get(movieIDs[i]);
-			for(int j= i+1; j<movieNum; j++){
-				PostingUser[] usersForMoviej = movieUsers.get(movieIDs[j]);
-				//here use movieI, movieJ, userInfoForMovieI, userInfoForMovieJ to compute. 
-				compute(movieIDs[i], movieIDs[j], usersForMoviei, usersForMoviej, true);
+			for(int j= 0; j<movieNum; j++){
+				if(i!=j){
+					PostingUser[] usersForMoviej = movieUsers.get(movieIDs[j]);
+					//here use movieI, movieJ, userInfoForMovieI, userInfoForMovieJ to compute. 
+					compute(movieIDs[i], movieIDs[j], usersForMoviei, usersForMoviej, true);
+				}
 			}
 		}
 		
 	}
 	
-	public void compareWithOthers(Reader reader) throws IOException{
-		int movieNum = movieUsers.keySet().size();
-		LongWritable key = new LongWritable();
-		PostingUserArrayWritable value = new PostingUserArrayWritable();
-		
-		Long [] movieIDs = new Long[movieNum];
-		movieUsers.keySet().toArray(movieIDs);
-		for(int i=0; i<movieNum-1; i++){
-			PostingUser[] usersForMoviei = movieUsers.get(movieIDs[i]);
-			while(reader.next(key, value)){
-				if(movieIDs[i]<key.get()){
-					compute(movieIDs[i], key.get(), usersForMoviei, value.getPosting(), false);
-				}
-			}
-		}
-	}
+//	public void compareWithOthers(Reader reader) throws IOException{
+//		int movieNum = movieUsers.keySet().size();
+//		LongWritable key = new LongWritable();
+//		PostingUserArrayWritable value = new PostingUserArrayWritable();
+//		
+//		Long [] movieIDs = new Long[movieNum];
+//		movieUsers.keySet().toArray(movieIDs);
+//		for(int i=0; i<movieNum-1; i++){
+//			PostingUser[] usersForMoviei = movieUsers.get(movieIDs[i]);
+//			while(reader.next(key, value)){
+//				if(movieIDs[i]<key.get()){
+//					compute(movieIDs[i], key.get(), usersForMoviei, value.getPosting(), false);
+//				}
+//			}
+//		}
+//	}
 	
 	
 	
@@ -92,26 +95,47 @@ public class KNNMapper extends MapReduceBase implements Mapper<LongWritable, Pos
 		}
 		float weightIJ = (float) (calculationResult[0] / Math.sqrt(calculationResult[1] * calculationResult[2]));
 		if(calculationResult[0]!=0){
-			if(own){
-				addNeighbour(iID, jID, weightIJ);
-				addNeighbour(jID, iID, weightIJ);
+//			if(own){
+//				addNeighbour(iID, jID, weightIJ);
+//				addNeighbour(jID, iID, weightIJ);
+//			}else{
+//				addNeighbour(iID, jID, weightIJ);
+//			}
+			//get wij
+			if(similarityNieghbour.containsKey(iID)){
+				ArrayList<Neighbour> iNeighbourhood = similarityNieghbour.get(iID);
+				iNeighbourhood.add(new Neighbour(jID, weightIJ));
 			}else{
-				addNeighbour(iID, jID, weightIJ);
+				ArrayList<Neighbour> iNeighbourhood = new ArrayList<Neighbour>();
+				iNeighbourhood.add(new Neighbour(jID, weightIJ));
+				similarityNieghbour.put(iID, iNeighbourhood);
 			}
 		}	
 	}
-	public void addNeighbour(long iId, long jId, float weightIJ) {
-		Neighbour n = new Neighbour(jId, weightIJ);
-		if (similarityNieghbour.containsKey(iId)) {
-			SortedArrayList<Neighbour> iNeighbourhood = similarityNieghbour.get(iId);
-			iNeighbourhood.add(new Neighbour(jId, weightIJ));// do we need to put
-			// again?
-		} else {
-			SortedArrayList<Neighbour> iNeighbourhood = new SortedArrayList<Neighbour>();
-			iNeighbourhood.add(new Neighbour(jId, weightIJ));
-			similarityNieghbour.put(iId, iNeighbourhood);
+	
+	public void addNeighbour(long iID, long jID, float weightIJ){
+		if(similarityNieghbour.containsKey(iID)){
+			ArrayList<Neighbour> iNeighbourhood = similarityNieghbour.get(iID);
+			iNeighbourhood.add(new Neighbour(jID, weightIJ));
+		}else{
+			ArrayList<Neighbour> iNeighbourhood = new ArrayList<Neighbour>();
+			iNeighbourhood.add(new Neighbour(jID, weightIJ));
+			similarityNieghbour.put(iID, iNeighbourhood);
 		}
 	}
+	
+//	public void addNeighbour(long iId, long jId, float weightIJ) {
+//		Neighbour n = new Neighbour(jId, weightIJ);
+//		if (similarityNieghbour.containsKey(iId)) {
+//			SortedArrayList<Neighbour> iNeighbourhood = similarityNieghbour.get(iId);
+//			iNeighbourhood.add(new Neighbour(jId, weightIJ));// do we need to put
+//			// again?
+//		} else {
+//			SortedArrayList<Neighbour> iNeighbourhood = new SortedArrayList<Neighbour>();
+//			iNeighbourhood.add(new Neighbour(jId, weightIJ));
+//			similarityNieghbour.put(iId, iNeighbourhood);
+//		}
+//	}
 	
 	
 	
