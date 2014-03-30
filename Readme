@@ -20,7 +20,7 @@ hadoop dfsadmin -safemode leave
 
 Create your reporsitory in your hadoop file system:
 hadoop fs -mkdir /input
-hadoop fs -put simple /input
+hadoop fs -put u1.test /input
 
 Compile your hadoop program:
 javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java Preprocess.java Neighbour.java NeighbourArrayWritable.java KNNMapper.java KNNMapRunner.java KNNMain.java SortedArrayList.java HelloWorld.java Query.java MainDriver.java 
