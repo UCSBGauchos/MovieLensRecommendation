@@ -1,3 +1,4 @@
+
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.LongWritable;
@@ -9,9 +10,9 @@ import org.apache.hadoop.io.ArrayFile;
 //Based on the paper "Efficient Multicore Collaborative Filtering", it will calculate top k similar neighbour songs of the given
 //song
 //No Reduce process for this KNN step
-public class KNNMain {
+public class ItemKNNMain {
 	public static void main(String [] args) throws Exception{
-		 JobConf conf = new JobConf(KNNMain.class);
+		 JobConf conf = new JobConf(ItemKNNMain.class);
 	     conf.setJobName("knn");
 	     conf.setMapOutputKeyClass(LongWritable.class);
 	     conf.setMapOutputValueClass(NeighbourArrayWritable.class);
@@ -19,8 +20,8 @@ public class KNNMain {
 	     conf.setNumReduceTasks(0);
 	     //conf.setOutputKeyClass(LongWritable.class);
 	     //conf.setOutputValueClass(PostingUserArrayWritable.class);
-	     conf.setMapRunnerClass(KNNMapRunner.class);
-	     conf.setMapperClass(KNNMapper.class);
+	     conf.setMapRunnerClass(ItemKNNMapRunner.class);
+	     conf.setMapperClass(ItemKNNMapper.class);
 	     //conf.setCombinerClass(CountUserInfoReduce.class);
 	     //conf.setReducerClass(CountUserInfoReduce.class);
 	     conf.setInputFormat(SequenceFileInputFormat.class);

@@ -13,8 +13,8 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.RecordReader;
 import org.apache.hadoop.mapred.Reporter;
 
-public class KNNMapRunner extends MapRunner<LongWritable, PostingUserArrayWritable, LongWritable, NeighbourArrayWritable>{
-	public KNNMapper mapper = new KNNMapper();
+public class ItemKNNMapRunner extends MapRunner<LongWritable, PostingUserArrayWritable, LongWritable, NeighbourArrayWritable>{
+	public ItemKNNMapper mapper = new ItemKNNMapper();
 	public HashMap<Long, PostingUser[]> MovieUsers = new HashMap<Long, PostingUser[]>();
 	public FileSystem hadoopFS;
 	public JobConf job;

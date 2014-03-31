@@ -17,11 +17,11 @@ public class MainDriver {
 		int exitCode = -1;
 		ProgramDriver driver = new ProgramDriver();
 		try{
-			driver.addClass("itempreprocess", ItemPreprocess.class, "Get the item based preprocess result from the given dataset");
-			driver.addClass("knn", KNNMain.class, "Do KNN Based on the preprocessed input data");
+			driver.addClass("itempreprocess", ItemPreprocess.class, "Get the item-based preprocess result from the given dataset");
+			driver.addClass("itemknn", ItemKNNMain.class, "Do item-based KNN on the preprocessed input data");
 			driver.addClass("helloworld", HelloWorld.class, "Hello World");
 			driver.addClass("collectuser", CollectUser.class, "Collect user infomation from the input dataset");
-			driver.addClass("start", Query.class, "Start predicting the rating. Make sure you have run collect, preprocess and knn command");
+			driver.addClass("startitemquery", ItemQuery.class, "Start item-based collaborative algorithm to predict the rating. Make sure you have run collect, preprocess and knn command");
 			driver.driver(argv);
 			exitCode = 0;
 		}catch(Throwable e){

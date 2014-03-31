@@ -9,7 +9,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.mapred.JobConf;
 
-public class Query {
+public class ItemQuery {
 	public static void main(String [] args) throws IOException {
 		boolean isRating = false;
 		HashMap<String, Float> localHash = new HashMap<String, Float>();
