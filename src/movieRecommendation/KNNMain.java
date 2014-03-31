@@ -26,7 +26,7 @@ public class KNNMain {
 	     conf.setInputFormat(SequenceFileInputFormat.class);
 	     //conf.setOutputFormat(TextOutputFormat.class);
 	     conf.setOutputFormat(TextOutputFormat.class);
-	     FileInputFormat.setInputPaths(conf, new Path("Preprocess"));
+	     FileInputFormat.setInputPaths(conf, new Path("ItemPreprocess"));
 	     //each time remove the outpt first
 	     FileSystem.get(conf).delete(new Path("KNN"), true);
 	     FileOutputFormat.setOutputPath(conf, new Path("KNN"));

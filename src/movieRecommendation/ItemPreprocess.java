@@ -9,7 +9,7 @@ import org.apache.hadoop.util.*;
 
 
 
-public class Preprocess {
+public class ItemPreprocess {
 	
 	public static class CountUserInfoMap extends MapReduceBase implements Mapper<LongWritable, MovieRatingArrayWritable, LongWritable, PostingUser>{
 		public LongWritable movieID = new LongWritable();
@@ -53,8 +53,8 @@ public class Preprocess {
 
 	
 	public static void main(String[] args) throws Exception {
-	     JobConf conf = new JobConf(Preprocess.class);
-	     conf.setJobName("preprocess");
+	     JobConf conf = new JobConf(ItemPreprocess.class);
+	     conf.setJobName("ItemPreprocess");
 	     conf.setMapOutputKeyClass(LongWritable.class);
 	     conf.setMapOutputValueClass(PostingUser.class);
 	     conf.setOutputKeyClass(LongWritable.class);
@@ -67,8 +67,8 @@ public class Preprocess {
 	     conf.setOutputFormat(SequenceFileOutputFormat.class);
 	     FileInputFormat.setInputPaths(conf, new Path("Collect"));
 	     //each time remove the outpt first
-	     FileSystem.get(conf).delete(new Path("Preprocess"), true);
-	     FileOutputFormat.setOutputPath(conf, new Path("Preprocess"));
+	     FileSystem.get(conf).delete(new Path("ItemPreprocess"), true);
+	     FileOutputFormat.setOutputPath(conf, new Path("ItemPreprocess"));
 	     MainDriver.run(conf);
 	   }
 }

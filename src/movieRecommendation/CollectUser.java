@@ -1,16 +1,21 @@
 import java.io.IOException;
 import java.util.*;
+
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
+//input: user, movie, rating, date
+//output: user, movieList
+
 public class CollectUser {
 	public static class CollectUserMap extends MapReduceBase implements Mapper<Object, Text, LongWritable, MovieRating>{
 		MovieRating movieInfo = new MovieRating();
 		public void map(Object unusedInKey, Text inValue, OutputCollector<LongWritable, MovieRating> output, Reporter reporter) throws IOException{			
 			String eachLine = inValue.toString();
+			StringTokenizer token = new StringTokenizer(eachLine, " |\t");
 			long uID = Long.parseLong(token.nextToken());
 			LongWritable userID = new LongWritable(uID);
 			long mID = Long.parseLong(token.nextToken());
