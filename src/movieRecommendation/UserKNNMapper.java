@@ -11,40 +11,40 @@ import org.apache.hadoop.mapred.Mapper;
 import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 
-public class ItemKNNMapper extends MapReduceBase implements Mapper<LongWritable, PostingUserArrayWritable, LongWritable, ItemNeighbourArrayWritable>{
+public class UserKNNMapper extends MapReduceBase implements Mapper<LongWritable, PostingMovieArrayWritable, LongWritable, UserNeighbourArrayWritable>{
 	
 	//movieID <userID, uverACG, rate>
-	public HashMap<Long, PostingUser[]> movieUsers;
-	public HashMap<Long, ArrayList<ItemNeighbour>> similarityNieghbour = new HashMap<Long, ArrayList<ItemNeighbour>>();
+	public HashMap<Long, PostingMovie[]> userMovies;
+	public HashMap<Long, ArrayList<UserNeighbour>> similarityNieghbour = new HashMap<Long, ArrayList<UserNeighbour>>();
 	
 	public void configure(JobConf job) {
 		
 	}
 	
-	public void map(LongWritable unusedKey, PostingUserArrayWritable unusedValue, OutputCollector<LongWritable, ItemNeighbourArrayWritable> output, Reporter reporter) throws IOException {
+	public void map(LongWritable unusedKey, PostingMovieArrayWritable unusedValue, OutputCollector<LongWritable, UserNeighbourArrayWritable> output, Reporter reporter) throws IOException {
 		Iterator<Long> itr = similarityNieghbour.keySet().iterator();
 		while(itr.hasNext()){
-			long movieID = itr.next();
-			ArrayList<ItemNeighbour> neighbourhood = similarityNieghbour.get(movieID);
-			ItemNeighbour[] toArray = new ItemNeighbour[neighbourhood.size()];
+			long userID = itr.next();
+			ArrayList<UserNeighbour> neighbourhood = similarityNieghbour.get(userID);
+			UserNeighbour[] toArray = new UserNeighbour[neighbourhood.size()];
 			neighbourhood.toArray(toArray);// debug this
-			output.collect(new LongWritable(movieID), new ItemNeighbourArrayWritable(toArray));
+			output.collect(new LongWritable(userID), new UserNeighbourArrayWritable(toArray));
 		}
 	}
 	
 	public void compareOwn(){
-		int movieNum = movieUsers.keySet().size();
-		Long[] movieIDs = new Long[movieNum];
-		movieUsers.keySet().toArray(movieIDs);
+		int userNum = userMovies.keySet().size();
+		Long[] userIDs = new Long[userNum];
+		userMovies.keySet().toArray(userIDs);
 		
 		//get the usetPostingInfo for each pair movie i and j
-		for(int i=0; i<movieNum; i++){
-			PostingUser[] usersForMoviei = movieUsers.get(movieIDs[i]);
-			for(int j= 0; j<movieNum; j++){
+		for(int i=0; i<userNum; i++){
+			PostingMovie[] moviesForUseri = userMovies.get(userIDs[i]);
+			for(int j= 0; j<userNum; j++){
 				if(i!=j){
-					PostingUser[] usersForMoviej = movieUsers.get(movieIDs[j]);
+					PostingMovie[] moviesForUserj = userMovies.get(userIDs[j]);
 					//here use movieI, movieJ, userInfoForMovieI, userInfoForMovieJ to compute. 
-					compute(movieIDs[i], movieIDs[j], usersForMoviei, usersForMoviej, true);
+					compute(userIDs[i], userIDs[j], moviesForUseri, moviesForUserj, true);
 				}
 			}
 		}
@@ -71,22 +71,22 @@ public class ItemKNNMapper extends MapReduceBase implements Mapper<LongWritable,
 	
 	
 	//four paras
-	public void compute(long iID, long jID, PostingUser[] usersForMoviei, PostingUser[] usersForMoviej, Boolean own){
+	public void compute(long iID, long jID, PostingMovie[] moviesForUseri, PostingMovie[] moviesForUserj, Boolean own){
 		int indexForI = 0;
 		int indexForJ = 0;
 		float [] calculationResult = new float[3];
-		while((indexForI<usersForMoviei.length)&&(indexForJ<usersForMoviej.length)){
-			if(usersForMoviei[indexForI].userID<usersForMoviej[indexForJ].userID){
+		while((indexForI<moviesForUseri.length)&&(indexForJ<moviesForUserj.length)){
+			if(moviesForUseri[indexForI].movieID<moviesForUserj[indexForJ].movieID){
 				indexForI++;
-			}else if(usersForMoviei[indexForI].userID>usersForMoviej[indexForJ].userID){
+			}else if(moviesForUseri[indexForI].movieID>moviesForUserj[indexForJ].movieID){
 				indexForJ++;
 			}else{
 				// + songjUsers[jPoint].avgRating + ")");
-				calculationResult[0] += ((usersForMoviei[indexForI].rate - usersForMoviei[indexForI].avgRating) * (usersForMoviej[indexForJ].rate - usersForMoviej[indexForJ].avgRating));
+				calculationResult[0] += ((moviesForUseri[indexForI].rate - moviesForUseri[indexForI].avgRating) * (moviesForUserj[indexForJ].rate - moviesForUserj[indexForJ].avgRating));
 
-				calculationResult[1] += Math.pow((usersForMoviej[indexForJ].rate - usersForMoviej[indexForJ].avgRating),
+				calculationResult[1] += Math.pow((moviesForUseri[indexForJ].rate - moviesForUserj[indexForJ].avgRating),
 						2);
-				calculationResult[2] += Math.pow((usersForMoviei[indexForI].rate - usersForMoviei[indexForI].avgRating),
+				calculationResult[2] += Math.pow((moviesForUseri[indexForI].rate - moviesForUserj[indexForI].avgRating),
 						2);
 				indexForI++;
 				indexForJ++;
@@ -103,26 +103,16 @@ public class ItemKNNMapper extends MapReduceBase implements Mapper<LongWritable,
 //			}
 			//get wij
 			if(similarityNieghbour.containsKey(iID)){
-				ArrayList<ItemNeighbour> iNeighbourhood = similarityNieghbour.get(iID);
-				iNeighbourhood.add(new ItemNeighbour(jID, weightIJ));
+				ArrayList<UserNeighbour> iNeighbourhood = similarityNieghbour.get(iID);
+				iNeighbourhood.add(new UserNeighbour(jID, weightIJ));
 			}else{
-				ArrayList<ItemNeighbour> iNeighbourhood = new ArrayList<ItemNeighbour>();
-				iNeighbourhood.add(new ItemNeighbour(jID, weightIJ));
+				ArrayList<UserNeighbour> iNeighbourhood = new ArrayList<UserNeighbour>();
+				iNeighbourhood.add(new UserNeighbour(jID, weightIJ));
 				similarityNieghbour.put(iID, iNeighbourhood);
 			}
 		}	
 	}
 	
-	public void addNeighbour(long iID, long jID, float weightIJ){
-		if(similarityNieghbour.containsKey(iID)){
-			ArrayList<ItemNeighbour> iNeighbourhood = similarityNieghbour.get(iID);
-			iNeighbourhood.add(new ItemNeighbour(jID, weightIJ));
-		}else{
-			ArrayList<ItemNeighbour> iNeighbourhood = new ArrayList<ItemNeighbour>();
-			iNeighbourhood.add(new ItemNeighbour(jID, weightIJ));
-			similarityNieghbour.put(iID, iNeighbourhood);
-		}
-	}
 	
 //	public void addNeighbour(long iId, long jId, float weightIJ) {
 //		Neighbour n = new Neighbour(jId, weightIJ);
@@ -141,3 +131,4 @@ public class ItemKNNMapper extends MapReduceBase implements Mapper<LongWritable,
 	
 
 }
+

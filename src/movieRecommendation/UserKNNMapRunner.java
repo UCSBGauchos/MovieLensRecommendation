@@ -13,9 +13,9 @@ import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.RecordReader;
 import org.apache.hadoop.mapred.Reporter;
 
-public class ItemKNNMapRunner extends MapRunner<LongWritable, PostingUserArrayWritable, LongWritable, ItemNeighbourArrayWritable>{
-	public ItemKNNMapper mapper = new ItemKNNMapper();
-	public HashMap<Long, PostingUser[]> MovieUsers = new HashMap<Long, PostingUser[]>();
+public class UserKNNMapRunner extends MapRunner<LongWritable, PostingMovieArrayWritable, LongWritable, UserNeighbourArrayWritable>{
+	public UserKNNMapper mapper = new UserKNNMapper();
+	public HashMap<Long, PostingMovie[]> UserMovies = new HashMap<Long, PostingMovie[]>();
 	public FileSystem hadoopFS;
 	public JobConf job;
 	public Path path;
@@ -32,11 +32,11 @@ public class ItemKNNMapRunner extends MapRunner<LongWritable, PostingUserArrayWr
 	
 	public void run(RecordReader input, OutputCollector output, Reporter reporter) throws IOException {
 		LongWritable key = new LongWritable();
-		PostingUserArrayWritable value = new PostingUserArrayWritable();
+		PostingMovieArrayWritable value = new PostingMovieArrayWritable();
 		while (input.next(key, value)){
-			MovieUsers.put(key.get(), value.getPosting());
+			UserMovies.put(key.get(), value.getPosting());
 		}
-		mapper.movieUsers = MovieUsers;
+		mapper.userMovies = UserMovies;
 		
 		//here call compareOwn to get neighbour in my own file
 		mapper.compareOwn();

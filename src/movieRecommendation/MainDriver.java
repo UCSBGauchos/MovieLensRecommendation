@@ -20,6 +20,7 @@ public class MainDriver {
 			driver.addClass("itempreprocess", ItemPreprocess.class, "Get the item-based preprocess result from the given dataset");
 			driver.addClass("userpreprocess", UserPreprocess.class, "Get the user-based preprocess result from the given dataset");
 			driver.addClass("itemknn", ItemKNNMain.class, "Do item-based KNN on the preprocessed input data");
+			driver.addClass("userknn", UserKNNMain.class, "Do user-based KNN on the preprocessed input data");
 			driver.addClass("helloworld", HelloWorld.class, "Hello World");
 			driver.addClass("collectuser", CollectUser.class, "Collect user infomation from the input dataset");
 			driver.addClass("startitemquery", ItemQuery.class, "Start item-based collaborative algorithm to predict the rating. Make sure you have run collect, preprocess and knn command");

@@ -4,20 +4,20 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
 
-public class NeighbourArrayWritable implements Writable{
+public class ItemNeighbourArrayWritable implements Writable{
 	public int size;
-	public Neighbour [] array;
+	public ItemNeighbour [] array;
 	
-	public NeighbourArrayWritable(){
+	public ItemNeighbourArrayWritable(){
 		
 	}
 	
-	public NeighbourArrayWritable(Neighbour[] values) {
+	public ItemNeighbourArrayWritable(ItemNeighbour[] values) {
 		this.size = values.length;
 		this.array = values;
 	} 
 	
-	public Neighbour [] getPosting(){
+	public ItemNeighbour [] getPosting(){
 		return array;
 	}
 	
@@ -33,9 +33,9 @@ public class NeighbourArrayWritable implements Writable{
 	//neighbour: mivieID weight
 	public void readFields(DataInput in) throws IOException {
 		this.size = in.readInt();
-		this.array = new Neighbour[this.size];
+		this.array = new ItemNeighbour[this.size];
 		for (int i = 0; i < size; i++){
-			array[i] = new Neighbour(in.readLong(), in.readFloat());
+			array[i] = new ItemNeighbour(in.readLong(), in.readFloat());
 		}
 	}	
 	
