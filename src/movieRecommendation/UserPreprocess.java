@@ -12,7 +12,7 @@ import org.apache.hadoop.util.*;
 
 
 public class UserPreprocess {
-	public static class CountUserInfoMap extends MapReduceBase implements Mapper<LongWritable, MovieRatingArrayWritable, LongWritable, PostingMovie>{
+	public static class CountMovieInfoMap extends MapReduceBase implements Mapper<LongWritable, MovieRatingArrayWritable, LongWritable, PostingMovie>{
 		public LongWritable userID = new LongWritable();
 		public PostingMovie movieValue = new PostingMovie();
 		
@@ -38,38 +38,38 @@ public class UserPreprocess {
 		}
 	}
 	
-	public static class CountUserInfoReduce extends MapReduceBase implements Reducer<LongWritable, PostingUser, LongWritable, PostingUserArrayWritable>{
-		public void reduce(LongWritable movieID, Iterator<PostingUser> nextUser, OutputCollector<LongWritable, PostingUserArrayWritable> output, Reporter reporter) throws IOException{
-			ArrayList<PostingUser> users = new ArrayList<PostingUser>();
-			while(nextUser.hasNext()){
-				PostingUser hold = nextUser.next();
-				users.add(new PostingUser(hold.userID, hold.avgRating, hold.rate));
+	public static class CountMovieInfoReduce extends MapReduceBase implements Reducer<LongWritable, PostingMovie, LongWritable, PostingMovieArrayWritable>{
+		public void reduce(LongWritable userID, Iterator<PostingMovie> nextMovie, OutputCollector<LongWritable, PostingMovieArrayWritable> output, Reporter reporter) throws IOException{
+			ArrayList<PostingMovie> movies = new ArrayList<PostingMovie>();
+			while(nextMovie.hasNext()){
+				PostingMovie hold = nextMovie.next();
+				movies.add(new PostingMovie(hold.movieID, hold.avgRating, hold.rate));
 			}
-			PostingUser[] arrayUsers = new PostingUser[users.size()];
-			arrayUsers = users.toArray(new PostingUser[users.size()]);
-			Arrays.sort(arrayUsers);// sorting checked
-			output.collect(movieID, new PostingUserArrayWritable(arrayUsers));
+			PostingMovie[] arrayMovies = new PostingMovie[movies.size()];
+			arrayMovies = movies.toArray(new PostingMovie[movies.size()]);
+			Arrays.sort(arrayMovies);// sorting checked
+			output.collect(userID, new PostingMovieArrayWritable(arrayMovies));
 		}
 	}
 	
 	public static void main(String[] args) throws Exception {
-	     JobConf conf = new JobConf(UserPreprocess.class);
-	     conf.setJobName("UserPreprocess");
-	     conf.setMapOutputKeyClass(LongWritable.class);
-	     conf.setMapOutputValueClass(PostingMovie.class);
-	     conf.setOutputKeyClass(LongWritable.class);
-	     conf.setOutputValueClass(PostingMovieArrayWritable.class);
-	     conf.setMapperClass(CountUserInfoMap.class);
-	     //conf.setCombinerClass(CountUserInfoReduce.class);
-	     conf.setReducerClass(CountUserInfoReduce.class);
-	     conf.setInputFormat(SequenceFileInputFormat.class);
-	     //conf.setOutputFormat(TextOutputFormat.class);
-	     conf.setOutputFormat(SequenceFileOutputFormat.class);
-	     FileInputFormat.setInputPaths(conf, new Path("Collect"));
-	     //each time remove the outpt first
-	     FileSystem.get(conf).delete(new Path("UserPreprocess"), true);
-	     FileOutputFormat.setOutputPath(conf, new Path("UserPreprocess"));
-	     MainDriver.run(conf);
-}
+		JobConf conf = new JobConf(UserPreprocess.class);
+	    conf.setJobName("UserPreprocess");
+	    conf.setMapOutputKeyClass(LongWritable.class);
+	    conf.setMapOutputValueClass(PostingMovie.class);
+	    conf.setOutputKeyClass(LongWritable.class);
+	    conf.setOutputValueClass(PostingMovieArrayWritable.class);
+	    conf.setMapperClass(CountMovieInfoMap.class);
+	    //conf.setCombinerClass(CountUserInfoReduce.class);
+	    conf.setReducerClass(CountMovieInfoReduce.class);
+	    conf.setInputFormat(SequenceFileInputFormat.class);
+	    conf.setOutputFormat(TextOutputFormat.class);
+	    //conf.setOutputFormat(SequenceFileOutputFormat.class);
+	    FileInputFormat.setInputPaths(conf, new Path("Collect"));
+	    //each time remove the outpt first
+	    FileSystem.get(conf).delete(new Path("UserPreprocess"), true);
+	    FileOutputFormat.setOutputPath(conf, new Path("UserPreprocess"));
+	    MainDriver.run(conf);
+	}
 	
 }
