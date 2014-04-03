@@ -84,9 +84,9 @@ public class UserKNNMapper extends MapReduceBase implements Mapper<LongWritable,
 				// + songjUsers[jPoint].avgRating + ")");
 				calculationResult[0] += ((moviesForUseri[indexForI].rate - moviesForUseri[indexForI].avgRating) * (moviesForUserj[indexForJ].rate - moviesForUserj[indexForJ].avgRating));
 
-				calculationResult[1] += Math.pow((moviesForUseri[indexForJ].rate - moviesForUserj[indexForJ].avgRating),
+				calculationResult[1] += Math.pow((moviesForUserj[indexForJ].rate - moviesForUserj[indexForJ].avgRating),
 						2);
-				calculationResult[2] += Math.pow((moviesForUseri[indexForI].rate - moviesForUserj[indexForI].avgRating),
+				calculationResult[2] += Math.pow((moviesForUseri[indexForI].rate - moviesForUseri[indexForI].avgRating),
 						2);
 				indexForI++;
 				indexForJ++;
