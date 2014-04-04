@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -28,6 +29,7 @@ public class UserKNNMapper extends MapReduceBase implements Mapper<LongWritable,
 			ArrayList<UserNeighbour> neighbourhood = similarityNieghbour.get(userID);
 			UserNeighbour[] toArray = new UserNeighbour[neighbourhood.size()];
 			neighbourhood.toArray(toArray);// debug this
+			Arrays.sort(toArray);// sorting checked
 			output.collect(new LongWritable(userID), new UserNeighbourArrayWritable(toArray));
 		}
 	}

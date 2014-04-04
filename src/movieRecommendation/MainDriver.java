@@ -24,6 +24,7 @@ public class MainDriver {
 			driver.addClass("helloworld", HelloWorld.class, "Hello World");
 			driver.addClass("collectuser", CollectUser.class, "Collect user infomation from the input dataset");
 			driver.addClass("startitemquery", ItemQuery.class, "Start item-based collaborative algorithm to predict the rating. Make sure you have run collect, preprocess and knn command");
+			driver.addClass("startuserquery", UserQuery.class, "Start user-based collaborative algorithm to predict the rating. Make sure you have run collect, preprocess and knn command");
 			driver.driver(argv);
 			exitCode = 0;
 		}catch(Throwable e){
