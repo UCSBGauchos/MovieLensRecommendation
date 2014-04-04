@@ -75,3 +75,6 @@ KNN algorithm to calculate the neighbour of a specific song based on the user in
 3-1
 Finish the query. Let the user to input the userID and the movieID, if the movie has not been rated, we will predict the 
 rating which this user may give to the movie.
+
+4-1
+User-based and item-based query complete
