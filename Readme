@@ -23,7 +23,7 @@ hadoop fs -mkdir /input
 hadoop fs -put u1.test /input
 
 Compile your hadoop program:
-javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java ItemPreprocess.java PostingMovie.java PostingMovieArrayWritable.java UserPreprocess.java ItemNeighbour.java ItemNeighbourArrayWritable.java ItemKNNMapper.java ItemKNNMapRunner.java ItemKNNMain.java UserNeighbour.java UserNeighbourArrayWritable.java UserKNNMapper.java UserKNNMapRunner.java  UserKNNMain.java SortedArrayList.java HelloWorld.java ItemQuery.java UserQuery.java MainDriver.java 
+javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java ItemPreprocess.java TendencyItemPreprocess.java PostingMovie.java PostingMovieArrayWritable.java UserPreprocess.java TendencyUserPreprocess.java ItemNeighbour.java ItemNeighbourArrayWritable.java ItemKNNMapper.java ItemKNNMapRunner.java ItemKNNMain.java UserNeighbour.java UserNeighbourArrayWritable.java UserKNNMapper.java UserKNNMapRunner.java  UserKNNMain.java SortedArrayList.java HelloWorld.java ItemQuery.java UserQuery.java MainDriver.java
 
 Greate a JAR file:
 jar -cvf knn.jar -C classes/ .
@@ -46,6 +46,10 @@ User-based
 Hadoop jar knn.jar MainDriver userpreprocess
 Hadoop jar knn.jar MainDriver userknn
 Hadoop jar knn.jar MainDriver startuserquery
+
+Tendency-based
+Hadoop jar knn.jar MainDriver tendencyuserpreprocess
+Hadoop jar knn.jar MainDriver tendencyitempreprocess
 
 Schedual:
 
@@ -78,3 +82,6 @@ rating which this user may give to the movie.
 
 4-1
 User-based and item-based query complete
+
+4-6
+Tendency-based recommendation
