@@ -123,6 +123,27 @@ public class TendencyQuery {
 		
 		System.out.println("Tendency of "+movieID+" is "+tendencyItem);
 		
+		int chosenUserSum = 0;
+		float chosenUserAvgRating = 0;
+		HashMap<String, Integer> chosenUser = userInfo.get(userID);
+		for(String mid: chosenUser.keySet()){
+			chosenUserSum+=chosenUser.get(mid);
+		}
+		chosenUserAvgRating = chosenUserSum/chosenUser.size();
+		System.out.println("The avg of chosen user "+userID+" is "+chosenUserAvgRating);
+		
+		int chosenMovieSum = 0;
+		float chosenMovieAvgRating = 0;
+		HashMap<String, Integer> chosenMovie = movieInfo.get(movieID);
+		for(String uid: chosenMovie.keySet()){
+			chosenMovieSum+=chosenMovie.get(uid);
+		}
+		chosenMovieAvgRating = chosenMovieSum/chosenMovie.size();
+		System.out.println("The avg of chosen movie "+movieID+" is "+chosenMovieAvgRating);
+		
+		
+		
+		
 		
 	}
 }
