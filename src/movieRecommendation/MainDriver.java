@@ -27,7 +27,7 @@ public class MainDriver {
 			driver.addClass("startuserquery", UserQuery.class, "Start user-based collaborative algorithm to predict the rating. Make sure you have run collect, preprocess and knn command");
 			driver.addClass("tendencyitempreprocess", TendencyItemPreprocess.class, "Get the tendency-based preprocess data, all the users rated to the item");
 			driver.addClass("tendencyuserpreprocess", TendencyUserPreprocess.class, "Get the tendency-based preprocess data, all the items the user has rated");
-			driver.addClass("startuserquery", UserQuery.class, "Start user-based collaborative algorithm to predict the rating. Make sure you have run collect, preprocess and knn command");
+			driver.addClass("starttendencyquery", TendencyQuery.class, "Start user-based collaborative algorithm to predict the rating. Make sure you have run collect, preprocess and knn command");
 			driver.driver(argv);
 			exitCode = 0;
 		}catch(Throwable e){
