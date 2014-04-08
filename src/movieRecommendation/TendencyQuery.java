@@ -142,6 +142,21 @@ public class TendencyQuery {
 		System.out.println("The avg of chosen movie "+movieID+" is "+chosenMovieAvgRating);
 		
 		
+		//both positive
+		if(tendencyItem>0&&tendencyUser>0){
+			System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+Math.max(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser));
+		}
+		
+		if(tendencyItem<0&&tendencyUser<0){
+			System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+Math.min(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser));
+		}
+		
+		if(tendencyItem>0&&tendencyUser<0){
+			float contribute = (float) 0.5;
+			float predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
+			System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
+		}
+		
 		
 		
 		
