@@ -82,25 +82,46 @@ public class TendencyQuery {
 		}
 		
 		HashMap<String, Integer> userRating = userInfo.get(userID);
-		float itemAvgRating = 0;
-		int itemSum = 0;
-
-		float top = 0;
-		float topSum = 0;
+		float userTop = 0;
+		float userTopSum = 0;
 		//for each movie the user has rated
 		for(String mid: userRating.keySet()){
+			float itemAvgRating = 0;
+			int itemSum = 0;
 			int rating = userRating.get(mid);
 			HashMap<String, Integer> movieUsers = movieInfo.get(mid);
 			for(String uid: movieUsers.keySet()){
 				itemSum+=movieUsers.get(uid);
 			}
 			itemAvgRating = itemSum/movieUsers.size();
-			top = (rating-itemAvgRating);
-			topSum += top;
+			//System.out.println("avg of this movie is "+itemAvgRating+" user's rating is "+rating);
+			userTop = (rating-itemAvgRating);
+			userTopSum += userTop;
 		}
-		float tendencyUser = topSum/userRating.size();
+		float tendencyUser = userTopSum/userRating.size();
 		
-		System.out.println(tendencyUser);
+		System.out.println("Tendency of "+userID+" is "+tendencyUser);
+		
+		HashMap<String, Integer> movieRating = movieInfo.get(movieID);
+		float itemTop = 0;
+		float itemTopSum = 0;
+		//for each user who rated this movie
+		for(String uid: movieRating.keySet()){
+			float userAvgRating = 0;
+			int userSum = 0;
+			int rating = movieRating.get(uid);
+			HashMap<String, Integer> userMovies = userInfo.get(uid);
+			for(String mid: userMovies.keySet()){
+				userSum+=userMovies.get(mid);
+			}
+			userAvgRating = userSum/userMovies.size();
+			//System.out.println("avg of this user is "+userAvgRating+" to this movie rating is "+rating);
+			itemTop = (rating-userAvgRating);
+			itemTopSum += itemTop;
+		}
+		float tendencyItem = userTopSum/movieRating.size();
+		
+		System.out.println("Tendency of "+movieID+" is "+tendencyItem);
 		
 		
 	}
