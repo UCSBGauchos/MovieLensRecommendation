@@ -81,7 +81,13 @@ public class TendencyQuery {
 			}
 		}
 		
+		
+		
 		HashMap<String, Integer> userRating = userInfo.get(userID);
+		if(userRating==null){
+			System.out.println("User "+userID+" doesn't exist in the current MovieLens database, cannot be predicted! ");
+			return;
+		}
 		float userTop = 0;
 		float userTopSum = 0;
 		//for each movie the user has rated
@@ -103,6 +109,10 @@ public class TendencyQuery {
 		System.out.println("Tendency of "+userID+" is "+tendencyUser);
 		
 		HashMap<String, Integer> movieRating = movieInfo.get(movieID);
+		if(movieRating==null){
+			System.out.println("Movie "+movieID+" doesn't exist in the current MovieLens database, cannot be predicted! ");
+			return;
+		}
 		float itemTop = 0;
 		float itemTopSum = 0;
 		//for each user who rated this movie
@@ -119,7 +129,7 @@ public class TendencyQuery {
 			itemTop = (rating-userAvgRating);
 			itemTopSum += itemTop;
 		}
-		float tendencyItem = userTopSum/movieRating.size();
+		float tendencyItem = itemTopSum/movieRating.size();
 		
 		System.out.println("Tendency of "+movieID+" is "+tendencyItem);
 		
@@ -141,20 +151,40 @@ public class TendencyQuery {
 		chosenMovieAvgRating = chosenMovieSum/chosenMovie.size();
 		System.out.println("The avg of chosen movie "+movieID+" is "+chosenMovieAvgRating);
 		
+		if(userRating.containsKey(movieID)){
+			System.out.println("User "+userID+" has rated "+userRating.get(movieID)+" to movie "+movieID+" ,no prediction ");
+			return;
+		}
 		
 		//both positive
 		if(tendencyItem>0&&tendencyUser>0){
+			System.out.println("Both positive, the user should give the good rating");
 			System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+Math.max(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser));
-		}
-		
-		if(tendencyItem<0&&tendencyUser<0){
+		}else if(tendencyItem<0&&tendencyUser<0){
+			System.out.println("Both negative, the user should give the bad rating");
 			System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+Math.min(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser));
-		}
-		
-		if(tendencyItem>0&&tendencyUser<0){
+		}else if(tendencyItem>0&&tendencyUser<0){
 			float contribute = (float) 0.5;
-			float predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
-			System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
+			if(chosenMovieAvgRating>=3&&chosenUserAvgRating<=2){
+				System.out.println("The mean matches the tendency");
+				float predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
+				System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
+			}else{
+				System.out.println("The mean doesn't match the tendency");
+				float predictResult = chosenMovieAvgRating*contribute+chosenUserAvgRating*(1-contribute);
+				System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);			
+			}
+		}else if(tendencyItem<0&&tendencyUser>0){
+			float contribute = (float) 0.5;
+			if(chosenMovieAvgRating<=2&&chosenUserAvgRating>=3){
+				System.out.println("The mean matches the tendency");
+				float predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
+				System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
+			}else{
+				System.out.println("The mean doesn't match the tendency");
+				float predictResult = chosenMovieAvgRating*contribute+chosenUserAvgRating*(1-contribute);
+				System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);	
+			}
 		}
 		
 		
