@@ -31,6 +31,9 @@ public class UserQuery {
 		Path UserResult=new Path("/input/u1.test");
 		FSDataInputStream UserData1 = hadoopFS.open(UserResult);
 		
+		//int threshold = 10;
+		//int i = 0;
+		
 		String neighbourtLine;
 		while ((neighbourtLine = KNNData.readLine()) != null){
 			StringTokenizer token = new StringTokenizer(neighbourtLine.toString(), " |\t,");
@@ -62,6 +65,9 @@ public class UserQuery {
 			}
 		}
 		System.out.println("Need to predict the rating which user "+userID+" gives to the movie "+movieID);
+		int threshold = 10;
+		int i=0;
+		int simSum = 0;
 		if(localHash.size()==0){
 			System.out.println("No record for "+movieID);
 		}else{
@@ -76,15 +82,18 @@ public class UserQuery {
 						String mid = token.nextToken();
 						Integer rating = Integer.parseInt(token.nextToken());
 						String time = token.nextToken();
-						if(uid.equals(guessUser)&&mid.equals(movieID)){
-							System.out.println("Use the guess user "+guessUser);
-							System.out.println("The predicted rating is user "+userID+" may give to the movie "+movieID+" is "+rating);
-							return;
+						if(uid.equals(guessUser)&&mid.equals(movieID)&&i<threshold){
+							//System.out.println("Use the guess user "+guessUser);
+							//System.out.println("The predicted rating is user "+userID+" may give to the movie "+movieID+" is "+rating);
+							i++;
+							simSum+=rating;
+							//return;
 						}
 					}
 				}
 				index++;
 			}
+			System.out.println("The predict result = "+(float)simSum/i);
 		}
 	}
 }
