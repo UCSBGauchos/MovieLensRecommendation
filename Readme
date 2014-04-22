@@ -6,6 +6,10 @@ Data Preprocess: Hadoop MapReduce
 Recommendation Algorithm: Collaborative filtering algorithm to predict the rating a registered users may give to a specific movie.
 Future Work: Different recommendation algorithms and compare them.
 
+Reference:
+http://epubs.siam.org/doi/abs/10.1137/1.9781611972757.43
+http://dl.acm.org/citation.cfm?id=1921593
+
 Path:
 cd /Users/yangbo/Workspaces/MyEclipse\ 10/MovieLensRecommendation/src/movieRecommendation
 
