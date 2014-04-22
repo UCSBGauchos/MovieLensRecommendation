@@ -49,15 +49,20 @@ public class ItemQuery {
 //		}
 		FSDataInputStream UserData = hadoopFS.open(UserResult);
 		
+		int threshold = 10;
+		int index = 0;
+		
+		//if there are more than 10 neighbours, then choose top 10 of them, else choose all
 		String neighbourtLine;
 		while ((neighbourtLine = KNNData.readLine()) != null){
 			StringTokenizer token = new StringTokenizer(neighbourtLine.toString(), " |\t,");
 			String mid = token.nextToken();
 			if(mid.equals(movieID)){
-				while(token.hasMoreTokens()){
+				while(token.hasMoreTokens()&&index<threshold){
 					String neighbourmid = token.nextToken();
 					float wij = Float.parseFloat(token.nextToken());
 					localHash.put(neighbourmid, wij);
+					index++;
 				}
 			}
 		}

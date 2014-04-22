@@ -7,11 +7,8 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
 
-//input: user, movie, rating, date
-//output: user, movieList
-
-public class CollectUser {
-	public static class CollectUserMap extends MapReduceBase implements Mapper<Object, Text, LongWritable, MovieRating>{
+public class SlopeOnePreprocess {
+	public static class SlopeOnePreprocessMap extends MapReduceBase implements Mapper<Object, Text, LongWritable, MovieRating>{
 		MovieRating movieInfo = new MovieRating();
 		public void map(Object unusedInKey, Text inValue, OutputCollector<LongWritable, MovieRating> output, Reporter reporter) throws IOException{			
 			String eachLine = inValue.toString();
@@ -28,7 +25,7 @@ public class CollectUser {
 			output.collect(userID, movieInfo);
 		}
 	}
-	public static class CollectUserReduce extends MapReduceBase implements Reducer<LongWritable, MovieRating, LongWritable, MovieRatingArrayWritable>{
+	public static class SlopeOnePreprocessReduce extends MapReduceBase implements Reducer<LongWritable, MovieRating, LongWritable, MovieRatingArrayWritable>{
 		public void reduce(LongWritable movieID, Iterator<MovieRating> nextMovie, OutputCollector<LongWritable, MovieRatingArrayWritable> output, Reporter reporter) throws IOException{
 			ArrayList<MovieRating> movies = new ArrayList<MovieRating>();
 			while(nextMovie.hasNext()){
@@ -43,21 +40,21 @@ public class CollectUser {
 	}
 	
 	public static void main(String[] args) throws Exception {
-	     JobConf conf = new JobConf(CollectUser.class);
-	     conf.setJobName("collectuser");
+	     JobConf conf = new JobConf(SlopeOnePreprocess.class);
+	     conf.setJobName("slopeonepreprocess");
 	     conf.setMapOutputKeyClass(LongWritable.class);
 	     conf.setMapOutputValueClass(MovieRating.class);
 	     conf.setOutputKeyClass(LongWritable.class);
 	     conf.setOutputValueClass(MovieRatingArrayWritable.class);
-	     conf.setMapperClass(CollectUserMap.class);
+	     conf.setMapperClass(SlopeOnePreprocessMap.class);
 	     //conf.setCombinerClass(CountUserInfoReduce.class);
-	     conf.setReducerClass(CollectUserReduce.class);
+	     conf.setReducerClass(SlopeOnePreprocessReduce.class);
 	     conf.setInputFormat(TextInputFormat.class);
-	     conf.setOutputFormat(SequenceFileOutputFormat.class);
-	     //conf.setOutputFormat(TextOutputFormat.class);
+	     //conf.setOutputFormat(SequenceFileOutputFormat.class);
+	     conf.setOutputFormat(TextOutputFormat.class);
 	     FileInputFormat.setInputPaths(conf, new Path(args[0]));
-	     FileSystem.get(conf).delete(new Path("Collect"), true);
-	     FileOutputFormat.setOutputPath(conf, new Path("Collect"));
+	     FileSystem.get(conf).delete(new Path("SlopeOnePreprocess"), true);
+	     FileOutputFormat.setOutputPath(conf, new Path("SlopeOnePreprocess"));
 	     MainDriver.run(conf);
 	}
 	
