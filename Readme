@@ -90,3 +90,11 @@ User-based and item-based query complete
 
 4-6
 Tendency-based recommendation
+
+4-22
+Finish one kind of model-based CF algotirthm. Next step is doing some evluation among these four CL algorithms:
+2 memory-based algorithm (user-based & item-based, knn algorithm)
+1 model-based algorithm (slope one algorithm)
+1 new algorithm (tendency-based algorithm)
+
+
