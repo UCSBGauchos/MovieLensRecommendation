@@ -41,6 +41,7 @@ public class SlopeOneTraining {
 			String uid = token.nextToken();
 			boolean containsI = false;
 			boolean containsJ = false;
+			//first detetmin whether each line cintains both movie i and movie j
 			while(token.hasMoreTokens()){
 				String mid = token.nextToken();
 				Integer rating = Integer.parseInt(token.nextToken());
@@ -67,7 +68,14 @@ public class SlopeOneTraining {
 				}
 			}
 		}
-		System.out.println(chosenUserInfo.keySet());
+		int length = chosenUserInfo.keySet().size();
+		float sum = 0;
+		for(String user: chosenUserInfo.keySet()){
+			HashMap<String, Integer> chosenValue = chosenUserInfo.get(user);
+			sum += (chosenValue.get(movieID)-chosenValue.get(tmp));
+		}
+		float dev = sum/length;
+		System.out.println("Dev equals to "+dev);
 	}
 	
 }
