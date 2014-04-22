@@ -23,7 +23,7 @@ hadoop fs -mkdir /input
 hadoop fs -put u1.test /input
 
 Compile your hadoop program:
-javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java ItemPreprocess.java TendencyItemPreprocess.java PostingMovie.java PostingMovieArrayWritable.java UserPreprocess.java TendencyUserPreprocess.java ItemNeighbour.java ItemNeighbourArrayWritable.java ItemKNNMapper.java ItemKNNMapRunner.java ItemKNNMain.java UserNeighbour.java UserNeighbourArrayWritable.java UserKNNMapper.java UserKNNMapRunner.java  UserKNNMain.java SortedArrayList.java HelloWorld.java ItemQuery.java UserQuery.java TendencyQuery.java SlopeOnePreprocess.java MainDriver.java 
+javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java ItemPreprocess.java TendencyItemPreprocess.java PostingMovie.java PostingMovieArrayWritable.java UserPreprocess.java TendencyUserPreprocess.java ItemNeighbour.java ItemNeighbourArrayWritable.java ItemKNNMapper.java ItemKNNMapRunner.java ItemKNNMain.java UserNeighbour.java UserNeighbourArrayWritable.java UserKNNMapper.java UserKNNMapRunner.java  UserKNNMain.java SortedArrayList.java HelloWorld.java ItemQuery.java UserQuery.java TendencyQuery.java SlopeOnePreprocess.java SlopeOneTraining.java MainDriver.java 
 
 Greate a JAR file:
 jar -cvf knn.jar -C classes/ .
@@ -54,6 +54,7 @@ Hadoop jar knn.jar MainDriver starttendencyquery
 
 Slopeone scheme
 Hadoop jar knn.jar MainDriver slopeonepreprocess /input
+Hadoop jar knn.jar MainDriver slopeonetraining
 
 Schedual:
 
