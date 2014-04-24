@@ -30,6 +30,7 @@ public class MainDriver {
 			driver.addClass("starttendencyquery", TendencyQuery.class, "Start user-based collaborative algorithm to predict the rating. Make sure you have run collect, preprocess and knn command");
 			driver.addClass("slopeonepreprocess", SlopeOnePreprocess.class, "Preprocess of the model-based CF, slopeone");
 			driver.addClass("slopeonetraining", SlopeOneTraining.class, "Training of the model-based CF, slopeone");			
+			driver.addClass("gettrainingsubset", GetTrainingSubSet.class, "Get the training dataset for evulation");			
 			driver.driver(argv);
 			exitCode = 0;
 		}catch(Throwable e){
