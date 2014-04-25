@@ -1,16 +1,19 @@
-Project Name: MovieLens Recommendation
-DataSet: http://movielens.org/login
+Project Name: Collaborative Filtering comparison based on the Movielens data set
+DataSet: http://movielens.org/login (MovieLens Dataset)
 
-Basic Idea:
-Data Preprocess: Hadoop MapReduce
-Recommendation Algorithm: Collaborative filtering algorithm to predict the rating a registered users may give to a specific movie.
-Future Work: Different recommendation algorithms and compare them.
+Instruction:
+Recommondation algorithm has become more and more important in today's machine learning region. There are many collaborative filtering
+algorithms. Some are memory-based, which are based on the similarities between KNN items or users. Some are model-based,
+whihc are based on the training models. And a new method is based on the tendency of items or movies, which is very fast
+and efficent. This goal of this project is try to find four CF algorithms and compare their accuracies.
+
+Future Work: More recommendation algorithms and compare them.
 
 Reference:
 http://epubs.siam.org/doi/abs/10.1137/1.9781611972757.43
 http://dl.acm.org/citation.cfm?id=1921593
 
---------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------
 
 Methology:
 
@@ -80,7 +83,7 @@ Slopeone scheme
 Hadoop jar knn.jar MainDriver slopeonepreprocess /input
 Hadoop jar knn.jar MainDriver slopeonetraining
 
---------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------
 
 Schedual:
 
@@ -122,5 +125,8 @@ Finish one kind of model-based CF algotirthm. Next step is doing some evluation 
 2 memory-based algorithm (user-based & item-based, knn algorithm)
 1 model-based algorithm (slope one algorithm)
 1 new algorithm (tendency-based algorithm)
+
+4-26
+Finish generating the training dataset and evulation dataset, which are used to compare different algorithms
 
 
