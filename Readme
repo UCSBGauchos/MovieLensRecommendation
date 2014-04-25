@@ -3,8 +3,7 @@ Author: Bo Yang
 DataSet: http://movielens.org/login (MovieLens Dataset)
 
 Instruction:
-Recommondation algorithm has become more and more important in today's machine learning region. There are many collaborative filtering algorithms. Some are memory-based, which are based on the similarities between KNN items or users. Some are model-based, which are based on the training models. And a new method is based on the tendency of items or movies, which is very fast
-and efficent. The goal of this project is try to implement three classic CF algorithms, one new CF algorithms, and compare their accuracy.
+Recommondation algorithm has become more and more important in today's machine learning region. There are many collaborative filtering algorithms. Some are memory-based, which are based on the similarities between KNN items or users. Some are model-based, which are based on the training models. And a new method is based on the tendency of items or movies, which is very fast and efficent. The goal of this project is try to implement three classic CF algorithms, one new CF algorithms, and compare their accuracy.
 
 Future Work: More recommendation algorithms and compare them.
 
