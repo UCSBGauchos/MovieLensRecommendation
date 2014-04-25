@@ -31,6 +31,7 @@ public class MainDriver {
 			driver.addClass("slopeonepreprocess", SlopeOnePreprocess.class, "Preprocess of the model-based CF, slopeone");
 			driver.addClass("slopeonetraining", SlopeOneTraining.class, "Training of the model-based CF, slopeone");			
 			driver.addClass("gettrainingsubset", GetTrainingSubSet.class, "Get the training dataset for evulation");			
+			driver.addClass("getevulationsubset", GetEvulationSubSet.class, "Get the evulation dataset for evulation");			
 			driver.driver(argv);
 			exitCode = 0;
 		}catch(Throwable e){
