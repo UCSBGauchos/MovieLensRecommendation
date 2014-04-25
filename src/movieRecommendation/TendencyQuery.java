@@ -10,9 +10,9 @@ import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.mapred.JobConf;
 
 public class TendencyQuery {
-	public static void main(String [] args) throws IOException {
-		
-		
+	
+	public float getResult(String userID, String movieID) throws IOException{
+		float predictResult = 0;
 		//movie1 u1 98 u2 100  
 		//movie2 u1 97 u3 100
 		HashMap<String, HashMap<String, Integer>> movieInfo = new HashMap<String, HashMap<String, Integer>>();
@@ -23,11 +23,11 @@ public class TendencyQuery {
 		
 		
 		JobConf job = new JobConf();
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		System.out.print("Enter movie userid: ");
-		String userID = br.readLine();
-		System.out.print("Enter movie id of the movie you want its predicted rate: ");
-		String movieID = br.readLine();
+//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		System.out.print("Enter movie userid: ");
+//		String userID = br.readLine();
+//		System.out.print("Enter movie id of the movie you want its predicted rate: ");
+//		String movieID = br.readLine();
 		
 
 		Path TendencyItemPreprocessResult = new Path("TendencyItemPreprocess/part-00000");
@@ -86,7 +86,7 @@ public class TendencyQuery {
 		HashMap<String, Integer> userRating = userInfo.get(userID);
 		if(userRating==null){
 			System.out.println("User "+userID+" doesn't exist in the current MovieLens database, cannot be predicted! ");
-			return;
+			return -1;
 		}
 		float userTop = 0;
 		float userTopSum = 0;
@@ -111,7 +111,7 @@ public class TendencyQuery {
 		HashMap<String, Integer> movieRating = movieInfo.get(movieID);
 		if(movieRating==null){
 			System.out.println("Movie "+movieID+" doesn't exist in the current MovieLens database, cannot be predicted! ");
-			return;
+			return -1;
 		}
 		float itemTop = 0;
 		float itemTopSum = 0;
@@ -140,7 +140,7 @@ public class TendencyQuery {
 			chosenUserSum+=chosenUser.get(mid);
 		}
 		chosenUserAvgRating = chosenUserSum/chosenUser.size();
-		System.out.println("The avg of chosen user "+userID+" is "+chosenUserAvgRating);
+		//System.out.println("The avg of chosen user "+userID+" is "+chosenUserAvgRating);
 		
 		int chosenMovieSum = 0;
 		float chosenMovieAvgRating = 0;
@@ -149,46 +149,85 @@ public class TendencyQuery {
 			chosenMovieSum+=chosenMovie.get(uid);
 		}
 		chosenMovieAvgRating = chosenMovieSum/chosenMovie.size();
-		System.out.println("The avg of chosen movie "+movieID+" is "+chosenMovieAvgRating);
+		//System.out.println("The avg of chosen movie "+movieID+" is "+chosenMovieAvgRating);
 		
 		if(userRating.containsKey(movieID)){
 			System.out.println("User "+userID+" has rated "+userRating.get(movieID)+" to movie "+movieID+" ,no prediction ");
-			return;
+			return -1;
 		}
 		
 		//both positive
 		if(tendencyItem>0&&tendencyUser>0){
-			System.out.println("Both positive, the user should give the good rating");
-			System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+Math.max(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser));
+			//System.out.println("Both positive, the user should give the good rating");
+			predictResult = Math.max(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser);
+			//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
 		}else if(tendencyItem<0&&tendencyUser<0){
-			System.out.println("Both negative, the user should give the bad rating");
-			System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+Math.min(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser));
+			//System.out.println("Both negative, the user should give the bad rating");
+			predictResult = Math.min(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser);
+			//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
 		}else if(tendencyItem>0&&tendencyUser<0){
 			float contribute = (float) 0.5;
 			if(chosenMovieAvgRating>=3&&chosenUserAvgRating<=2){
-				System.out.println("The mean matches the tendency");
-				float predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
-				System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
+				//System.out.println("The mean matches the tendency");
+				predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
+				//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
 			}else{
-				System.out.println("The mean doesn't match the tendency");
-				float predictResult = chosenMovieAvgRating*contribute+chosenUserAvgRating*(1-contribute);
-				System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);			
+				//System.out.println("The mean doesn't match the tendency");
+				predictResult = chosenMovieAvgRating*contribute+chosenUserAvgRating*(1-contribute);
+				//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);			
 			}
 		}else if(tendencyItem<0&&tendencyUser>0){
 			float contribute = (float) 0.5;
 			if(chosenMovieAvgRating<=2&&chosenUserAvgRating>=3){
-				System.out.println("The mean matches the tendency");
-				float predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
-				System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
+				//System.out.println("The mean matches the tendency");
+				predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
+				//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
 			}else{
-				System.out.println("The mean doesn't match the tendency");
-				float predictResult = chosenMovieAvgRating*contribute+chosenUserAvgRating*(1-contribute);
-				System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);	
+				//System.out.println("The mean doesn't match the tendency");
+				predictResult = chosenMovieAvgRating*contribute+chosenUserAvgRating*(1-contribute);
+				//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);	
 			}
 		}
-		
-		
-		
-		
+		return predictResult;
+	}
+	
+	public static void main(String [] args) throws IOException {
+		TendencyQuery t = new TendencyQuery();
+		float sum = 0;
+		float diff = 0;
+		int num = 0;
+		float MAEResult = 0;
+		FileReader Reader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/Evulation");
+		BufferedReader br = new BufferedReader(Reader);
+		FileWriter writer = new FileWriter("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/90TendencyLog");
+	    BufferedWriter bw = new BufferedWriter(writer);
+		String str = null;
+		while((str = br.readLine())!=null){
+			StringTokenizer token = new StringTokenizer(str.toString(), " \t");
+			while(token.hasMoreTokens()){
+				String userID = token.nextToken();
+				String movieID = token.nextToken();
+				String rating = token.nextToken();
+				String date = token.nextToken();
+				float pred = t.getResult(userID, movieID);
+				if(pred!=-1){
+					diff = Math.abs(pred - Integer.parseInt(rating));
+					String log = "User: "+userID+" Movie: "+movieID+" pred is "+pred+" rating is "+Integer.parseInt(rating)+" diff is "+diff;
+					System.out.println(log);
+					bw.write(log);
+					bw.newLine();
+					sum+=diff;
+					num++;
+				}
+			}
+		}
+		MAEResult = (float)sum/num;
+		String logResult = "MAE is "+MAEResult;
+		bw.write(logResult);
+		System.out.println(logResult);
+		Reader.close();
+		br.close();
+		bw.close();
+		writer.close();
 	}
 }
