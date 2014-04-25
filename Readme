@@ -34,7 +34,17 @@ Hadoop jar knn.jar MainDriver getevulationsubset
 
 Create your reporsitory in your hadoop file system:
 hadoop fs -mkdir /input
-hadoop fs -put u1.test /input
+Training set
+hadoop fs -put 10 /input
+hadoop fs -put 20 /input
+hadoop fs -put 30 /input
+hadoop fs -put 40 /input
+hadoop fs -put 50 /input
+hadoop fs -put 60 /input
+hadoop fs -put 70 /input
+hadoop fs -put 80 /input
+hadoop fs -put 90 /input
+
 
 Compile your hadoop program:
 javac -classpath /Users/yangbo/Documents/hadoop-1.2.1/hadoop-core-1.2.1.jar -d classes MovieRating.java MovieRatingArrayWritable.java CollectUser.java PostingUser.java PostingUserArrayWritable.java ItemPreprocess.java TendencyItemPreprocess.java PostingMovie.java PostingMovieArrayWritable.java UserPreprocess.java TendencyUserPreprocess.java ItemNeighbour.java ItemNeighbourArrayWritable.java ItemKNNMapper.java ItemKNNMapRunner.java ItemKNNMain.java UserNeighbour.java UserNeighbourArrayWritable.java UserKNNMapper.java UserKNNMapRunner.java  UserKNNMain.java SortedArrayList.java HelloWorld.java ItemQuery.java UserQuery.java TendencyQuery.java SlopeOnePreprocess.java SlopeOneTraining.java GetTrainingSubSet.java GetEvulationSubSet.java MainDriver.java
