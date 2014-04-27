@@ -71,6 +71,7 @@ public class ItemQuery {
 			}
 		}
 		//System.out.println(localHash);
+		KNNData.close();
 
 		String userLine;
 		while ((userLine = UserData.readLine()) != null){
@@ -85,6 +86,7 @@ public class ItemQuery {
 				}
 			}
 		}
+		UserData.close();
 		float predictedRateUp = 0f;
 		float predictedRateDown = 0f;
 		//System.out.println(localUserRating);

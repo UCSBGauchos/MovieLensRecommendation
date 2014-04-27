@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class GetEvulationSubSet {
 	public static void main(String [] args) throws IOException{
-		FileReader originalReader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/u1.test");
+		FileReader originalReader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/database");
 		BufferedReader obr = new BufferedReader(originalReader);
 		FileReader Reader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/90");
 		BufferedReader br = new BufferedReader(Reader);

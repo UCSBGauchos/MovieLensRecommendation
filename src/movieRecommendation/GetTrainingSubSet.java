@@ -10,9 +10,9 @@ import java.util.StringTokenizer;
 public class GetTrainingSubSet {
 	public static void main(String [] args) throws IOException{
 		HashMap<String, Integer> cache = new HashMap<String, Integer>();
-		FileReader preReader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/u1.test");
+		FileReader preReader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/database");
 		BufferedReader preBr = new BufferedReader(preReader);
-		FileReader Reader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/u1.test");
+		FileReader Reader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/database");
 		BufferedReader br = new BufferedReader(Reader);
 		String preStr = null;
 		String str = null;

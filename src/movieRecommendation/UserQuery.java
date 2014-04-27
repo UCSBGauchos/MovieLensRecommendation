@@ -15,6 +15,7 @@ public class UserQuery {
 		float predResult = 0;
 		boolean isRating = false;
 		ArrayList<String> localHash = new ArrayList<String>();
+		HashMap<String, HashMap<String, Integer>> localUserRating = new HashMap<String, HashMap<String, Integer>>();
 		JobConf job = new JobConf();
 
 //		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -31,7 +32,7 @@ public class UserQuery {
 		FSDataInputStream KNNData = hadoopFS.open(KNNResult);
 		
 		Path UserResult=new Path("/input/90");
-		FSDataInputStream UserData1 = hadoopFS.open(UserResult);
+		FSDataInputStream UserData = hadoopFS.open(UserResult);
 		
 		//int threshold = 10;
 		//int i = 0;
@@ -48,54 +49,55 @@ public class UserQuery {
 				}
 			}
 		}
+		KNNData.close();
 		
 		//System.out.println(localHash);
 		
 		
 		String userLine;
-		while ((userLine = UserData1.readLine()) != null){
+		while ((userLine = UserData.readLine()) != null){
 			StringTokenizer token = new StringTokenizer(userLine.toString(), " |\t");
 			while(token.hasMoreTokens()){
 				String uid = token.nextToken();
 				String mid = token.nextToken();
 				Integer rating = Integer.parseInt(token.nextToken());
 				String time = token.nextToken();
-				if(uid.equals(userID)&&mid.equals(movieID)){
-					System.out.println("User "+userID+" has rated "+rating+" to the movie "+movieID+" no need to predict");
-					return -1;
+				if(!localUserRating.containsKey(uid)){
+					HashMap<String, Integer> ratingInfo = new HashMap<String, Integer>();
+					localUserRating.put(uid, ratingInfo);
+				}else{
+					HashMap<String, Integer> ratingInfo = localUserRating.get(uid);
+					ratingInfo.put(mid, rating);
 				}
 			}
 		}
-		System.out.println("Need to predict the rating which user "+userID+" gives to the movie "+movieID);
-		int threshold = 10;
-		int i=0;
-		int simSum = 0;
-		if(localHash.size()==0){
-			System.out.println("No record for "+movieID);
+		UserData.close();
+		
+		if(localHash.size() == 0){
+			System.out.println("No report for users neighbour");
+			return -1;
+		}
+		
+		if(localUserRating.get(userID).size() == 0){
+			System.out.println("No user reccord");
+			return -1;
+		}
+		
+		if(localUserRating.get(userID).containsKey(movieID)){
+			System.out.println("No need to predict");
 			return -1;
 		}else{
-			int index = 0;
-			while(index<localHash.size()){
-				String guessUser = localHash.get(index);
-				FSDataInputStream UserData2 = hadoopFS.open(UserResult);
-				while ((userLine = UserData2.readLine()) != null){
-					StringTokenizer token = new StringTokenizer(userLine.toString(), " |\t");
-					while(token.hasMoreTokens()){
-						String uid = token.nextToken();
-						String mid = token.nextToken();
-						Integer rating = Integer.parseInt(token.nextToken());
-						String time = token.nextToken();
-						if(uid.equals(guessUser)&&mid.equals(movieID)&&i<threshold){
-							//System.out.println("Use the guess user "+guessUser);
-							//System.out.println("The predicted rating is user "+userID+" may give to the movie "+movieID+" is "+rating);
-							i++;
-							simSum+=rating;
-							//return;
-						}
+			System.out.println("Need to predict the rating which user "+userID+" gives to the movie "+movieID);
+			int threshold = 10;
+			int i=0;
+			int simSum = 0;
+			for(String neighbourUserID: localHash){
+				if(localUserRating.containsKey(neighbourUserID)){
+					if(localUserRating.get(neighbourUserID).containsKey(movieID)&&i<threshold){
+						simSum+=localUserRating.get(neighbourUserID).get(movieID);
+						i++;
 					}
 				}
-				index++;
-				UserData2.close();
 			}
 			if(i==0){
 				System.out.println("All the neighbour user of the given user has not rated to the given movie, cannot predict");
@@ -103,10 +105,8 @@ public class UserQuery {
 			}
 			predResult = (float)simSum/i;
 			System.out.println("The predict result = "+predResult);
-			KNNData.close();
-			UserData1.close();
-			return predResult;
 		}
+		return predResult;
 	}
 	
 	public static void main(String [] args) throws IOException {
