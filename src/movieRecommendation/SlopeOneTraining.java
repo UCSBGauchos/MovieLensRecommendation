@@ -18,6 +18,7 @@ public class SlopeOneTraining {
 		//user3 movie 100
 		//only choose those users which rate both i and j
 		HashMap<String, Integer> hasRatedMovie = new HashMap<String, Integer>();
+		HashMap<String, HashMap<String, Integer>> localUserRating = new HashMap<String, HashMap<String, Integer>>();
 //		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 //		System.out.print("Enter movie userid: ");
 //		String userID = br.readLine();
@@ -32,64 +33,65 @@ public class SlopeOneTraining {
 			throw new UnsupportedEncodingException("SlopeOnePreprocess is not set");
 		}
 		FSDataInputStream SlopeOnePreprocessData1 = hadoopFS.open(SlopeOnePreprocessResult);
+		FSDataInputStream SlopeOnePreprocessData2 = hadoopFS.open(SlopeOnePreprocessResult);
 		
+		//hasRatedMovie store all the movies which the chosen user has rated
 		String UserLine;
 		int ratingSum = 0;
 		while((UserLine = SlopeOnePreprocessData1.readLine()) != null){
-			StringTokenizer token3 = new StringTokenizer(UserLine.toString(), " |\t,");//for tracking outside loop
-			String uid3 = token3.nextToken();
-			while(token3.hasMoreTokens()){
-				String mid3 = token3.nextToken();
-				Integer rating3 = Integer.parseInt(token3.nextToken());
-				if(uid3.equals(userID)){
-					hasRatedMovie.put(mid3, rating3);
-					ratingSum+=rating3;
+			StringTokenizer token = new StringTokenizer(UserLine.toString(), " |\t,");//for tracking outside loop
+			String uid = token.nextToken();
+			while(token.hasMoreTokens()){
+				String mid = token.nextToken();
+				Integer rating = Integer.parseInt(token.nextToken());
+				if(uid.equals(userID)){
+					hasRatedMovie.put(mid, rating);
+					ratingSum+=rating;
 				}
 			}
 		}
 		SlopeOnePreprocessData1.close();
 		
+		//localUserRating store all the user rating infos from the input file
+		while((UserLine = SlopeOnePreprocessData2.readLine()) != null){
+			StringTokenizer token = new StringTokenizer(UserLine.toString(), " |\t,");
+			String uid = token.nextToken();
+			while(token.hasMoreTokens()){
+				String mid = token.nextToken();
+				Integer rating = Integer.parseInt(token.nextToken());
+				if(!localUserRating.containsKey(uid)){
+					HashMap<String, Integer> value = new HashMap<String, Integer>();
+					value.put(mid, rating);
+					localUserRating.put(uid, value);
+				}else{
+					localUserRating.get(uid).put(mid, rating);
+				}
+			}
+		}
+		SlopeOnePreprocessData2.close();
 		
-		//System.out.println(hasRatedMovie);
-		//each movie in the list as the movie
+		
 		int bigSum = 0;
 		int index = 0;
-		System.out.print("Training");
+		
+		if(hasRatedMovie.size() == 0){
+			System.out.println("this user has not rated any movie, cannot predict");
+			return -1;
+		}
+		
+		if(localUserRating.size() == 0){
+			System.out.println("No record");
+			return -1;
+		}
+		
 		for(String movie: hasRatedMovie.keySet()){
-			FSDataInputStream SlopeOnePreprocessData2 = hadoopFS.open(SlopeOnePreprocessResult);
-			String itemLine;
+			//chosenUserInfo store all the users which is chosen, because this user has rated both current movie and the predict
+			//movie
 			HashMap<String, HashMap<String, Integer>> chosenUserInfo = new HashMap<String, HashMap<String, Integer>>();
-			while((itemLine = SlopeOnePreprocessData2.readLine()) != null){
-				StringTokenizer token = new StringTokenizer(itemLine.toString(), " |\t,");
-				StringTokenizer token2 = new StringTokenizer(itemLine.toString(), " |\t,");
-				String uid = token.nextToken();
-				boolean containsI = false;
-				boolean containsJ = false;
-				//first detetmin whether each line cintains both movie i and movie j
-				while(token.hasMoreTokens()){
-					String mid = token.nextToken();
-					Integer rating = Integer.parseInt(token.nextToken());
-					if(mid.equals(movieID)){
-						containsJ = true;
-					}
-					if(mid.equals(movie)){
-						containsI = true;
-					}
-				}
-				//if this line contains both movie i and j, then it will be written to the list
-				if(containsI == true && containsJ == true){
-					String uid2 = token2.nextToken();
-					while(token2.hasMoreTokens()){
-						String mid2 = token2.nextToken();
-						Integer rating2 = Integer.parseInt(token2.nextToken());
-						HashMap<String, Integer> value = new HashMap<String, Integer>();
-						value.put(mid2, rating2);
-						if(!chosenUserInfo.containsKey(uid2)){
-							chosenUserInfo.put(uid2, value);
-						}else{
-							chosenUserInfo.get(uid2).put(mid2, rating2);
-						}
-					}
+			for(String uid: localUserRating.keySet()){
+				//this user has rated both movie and current movie
+				if(localUserRating.get(uid).keySet().contains(movie)&&localUserRating.get(uid).keySet().contains(movieID)){
+					chosenUserInfo.put(uid, localUserRating.get(uid));
 				}
 			}
 			if(chosenUserInfo.size()!=0){
@@ -103,11 +105,8 @@ public class SlopeOneTraining {
 				bigSum+=dev;
 				index++;
 				//System.out.println("Dev for "+movieID+" and "+movie+" equals to "+dev);
-				System.out.print(".");
 			}
-			SlopeOnePreprocessData2.close();
 		}
-		System.out.println();
 		if(index == 0){
 			return -1;
 		}
