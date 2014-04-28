@@ -78,7 +78,7 @@ public class UserQuery {
 			return -1;
 		}
 		
-		if(localUserRating.get(userID).size() == 0){
+		if(localUserRating.size() == 0){
 			System.out.println("No user reccord");
 			return -1;
 		}

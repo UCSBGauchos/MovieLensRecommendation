@@ -64,6 +64,10 @@ public class TendencyQuery {
 			}
 		}
 		
+		TendencyItemPreprocessData.close();
+		
+		
+		
 		while ((userLine = TendencyUserPreprocessData.readLine()) != null){
 			StringTokenizer token = new StringTokenizer(userLine.toString(), " |\t,");
 			String uid = token.nextToken();
@@ -79,6 +83,13 @@ public class TendencyQuery {
 					userInfo.get(uid).put(mid, rating);
 				}
 			}
+		}
+		
+		TendencyUserPreprocessData.close();
+		
+		if(userInfo.size() == 0||movieInfo.size() == 0){
+			System.out.println("No record");
+			return -1;
 		}
 		
 		
