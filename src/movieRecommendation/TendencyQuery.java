@@ -169,34 +169,22 @@ public class TendencyQuery {
 		
 		//both positive
 		if(tendencyItem>0&&tendencyUser>0){
-			//System.out.println("Both positive, the user should give the good rating");
 			predictResult = Math.max(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser);
-			//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
 		}else if(tendencyItem<0&&tendencyUser<0){
-			//System.out.println("Both negative, the user should give the bad rating");
 			predictResult = Math.min(chosenUserAvgRating+tendencyItem, chosenMovieAvgRating+tendencyUser);
-			//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
 		}else if(tendencyItem>0&&tendencyUser<0){
 			float contribute = (float) 0.5;
 			if(chosenMovieAvgRating>=3&&chosenUserAvgRating<=2){
-				//System.out.println("The mean matches the tendency");
 				predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
-				//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
 			}else{
-				//System.out.println("The mean doesn't match the tendency");
 				predictResult = chosenMovieAvgRating*contribute+chosenUserAvgRating*(1-contribute);
-				//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);			
 			}
 		}else if(tendencyItem<0&&tendencyUser>0){
 			float contribute = (float) 0.5;
 			if(chosenMovieAvgRating<=2&&chosenUserAvgRating>=3){
-				//System.out.println("The mean matches the tendency");
 				predictResult = Math.min(Math.max(chosenUserAvgRating, (chosenMovieAvgRating+tendencyUser)*contribute+(chosenUserAvgRating+tendencyItem)*(1-contribute)), chosenMovieAvgRating);
-				//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);
 			}else{
-				//System.out.println("The mean doesn't match the tendency");
 				predictResult = chosenMovieAvgRating*contribute+chosenUserAvgRating*(1-contribute);
-				//System.out.println("The prediction of user "+userID+" to movie "+movieID+" is "+predictResult);	
 			}
 		}
 		return predictResult;
