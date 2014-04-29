@@ -47,7 +47,7 @@ public class ItemQuery {
 		}
 		FSDataInputStream KNNData = hadoopFS.open(KNNResult);
 		
-		Path UserResult=new Path("/input/10");
+		Path UserResult=new Path("/input/80");
 //		if(!hadoopFS.exists(new Path("/input"))){
 //			throw new UnsupportedEncodingException("KNN is not set");
 //		}
@@ -132,7 +132,7 @@ public class ItemQuery {
 		float MAEResult = 0;
 		FileReader Reader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/Evulation");
 		BufferedReader br = new BufferedReader(Reader);
-		FileWriter writer = new FileWriter("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/10ItemBasedLog");
+		FileWriter writer = new FileWriter("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/80ItemBasedLog");
 	    BufferedWriter bw = new BufferedWriter(writer);
 		String str = null;
 		while((str = br.readLine())!=null){
