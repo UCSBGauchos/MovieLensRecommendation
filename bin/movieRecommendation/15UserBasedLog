@@ -1,0 +1,4 @@
+User: 1 Movie: 245 pred is 3.0 rating is 2 diff is 1.0
+User: 1 Movie: 263 pred is 3.0 rating is 1 diff is 2.0
+User: 1 Movie: 268 pred is 1.0 rating is 5 diff is 4.0
+MAE is 2.3333333

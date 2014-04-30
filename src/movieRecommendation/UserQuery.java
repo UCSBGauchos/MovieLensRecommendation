@@ -31,7 +31,7 @@ public class UserQuery {
 		}
 		FSDataInputStream KNNData = hadoopFS.open(KNNResult);
 		
-		Path UserResult=new Path("/input/90");
+		Path UserResult=new Path("/input/30");
 		FSDataInputStream UserData = hadoopFS.open(UserResult);
 		
 		//int threshold = 10;
@@ -117,7 +117,7 @@ public class UserQuery {
 		float MAEResult = 0;
 		FileReader Reader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/Evulation");
 		BufferedReader br = new BufferedReader(Reader);
-		FileWriter writer = new FileWriter("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/90UserBasedLog");
+		FileWriter writer = new FileWriter("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/30UserBasedLog");
 	    BufferedWriter bw = new BufferedWriter(writer);
 		String str = null;
 		while((str = br.readLine())!=null){
