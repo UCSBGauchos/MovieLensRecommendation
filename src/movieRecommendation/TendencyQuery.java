@@ -198,7 +198,7 @@ public class TendencyQuery {
 		float MAEResult = 0;
 		FileReader Reader = new FileReader("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/Evulation");
 		BufferedReader br = new BufferedReader(Reader);
-		FileWriter writer = new FileWriter("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/90TendencyLog");
+		FileWriter writer = new FileWriter("/Users/yangbo/Workspaces/MyEclipse 10/MovieLensRecommendation/src/movieRecommendation/80TendencyLog");
 	    BufferedWriter bw = new BufferedWriter(writer);
 		String str = null;
 		while((str = br.readLine())!=null){
